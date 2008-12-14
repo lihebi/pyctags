@@ -1,0 +1,5 @@
+
+include doc/*
+include tests/*.py tests/relpath.txt
+include examples/*.py
+include COPYING COPYING.LESSER
