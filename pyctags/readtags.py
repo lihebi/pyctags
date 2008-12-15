@@ -307,7 +307,7 @@ class ctags_file:
 
                 self.__tags_by_repr[repr(entry)] = entry
 
-        self.__sorted_tags.sort(key=str)
+        self.__sorted_tags.sort(key=repr)
         self.__sorted_unique_tag_names = self.__tags_by_name.keys()
         self.__sorted_unique_tag_names.sort()
         
@@ -432,3 +432,13 @@ class ctags_file:
     
     def __iter__(self):
         return self.__sorted_tags.__iter__()
+    
+    def __contains__(self, i):
+        if isinstance(i, ctags_entry):
+            i = repr(i)
+        
+        if i in self.__tags_by_repr:
+            return True
+        else:
+            return False
+        

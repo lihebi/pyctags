@@ -48,7 +48,7 @@ class end_to_end(unittest.TestCase):
         tf2 = ctags_file(tag_lists['relpath']['head'] + tag_lists['relpath']['body'])
         i = 0
         for t in tf:
-            self.failUnlessEqual(t, tf2[i])
+            self.failUnless(t in tf2)
             i += 1
         self.failUnlessEqual(len(tf.starts_with('t')), len(tf2.starts_with('t')))
 

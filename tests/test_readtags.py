@@ -194,12 +194,14 @@ class test_ctags_file(unittest.TestCase):
     
     def test_init_list(self):
         tf = ctags_file(tag_lists['unextended']['body'])
-        self.failUnlessEqual(tf[0], ctags_entry(tag_lists['unextended']['body'][0]))
-        self.failUnlessEqual(tf[-1], ctags_entry(tag_lists['unextended']['body'][-1]))
-        
+        for line in tag_lists['unextended']['body']:
+            e = ctags_entry(line)
+            self.failIf(e not in tf)
+            
         tf = ctags_file(tag_lists['relpath']['body'])
-        self.failUnlessEqual(tf[0], ctags_entry(tag_lists['relpath']['body'][0]))
-        self.failUnlessEqual(tf[-1], ctags_entry(tag_lists['relpath']['body'][-1]))
+        for line in tag_lists['relpath']['body']:
+            e = ctags_entry(line)
+            self.failIf(e not in tf)
         
     def test_parse_list(self):
         tf = ctags_file()
@@ -283,13 +285,13 @@ class test_ctags_file(unittest.TestCase):
     
     def test_extended_kinds(self):
         tf = ctags_file(tag_lists['extended']['body'])
-        self.failUnlessEqual(tf[0].extensions['kind'], 'c')
+        self.failUnlessEqual(tf[0].extensions['kind'], 'v')
     
     def test_getitem(self):
         tf = ctags_file()
-        tf.parse(tag_lists['relpath']['body'])
-        te = tf[0]
         ent = ctags_entry(tag_lists['relpath']['body'][0])
+        tf.parse(tag_lists['relpath']['body'])
+        te = tf[repr(ent)]
         self.failUnlessEqual(te, ent)
  
     def test_setitem(self):
