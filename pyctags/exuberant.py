@@ -69,12 +69,12 @@ class exuberant_ctags(ctags_base):
         lines = p.stdout.readlines()
 
         if lines[0].lower().find(self.__exuberant_id) < 0:
-            raise TypeError, "Executable file %s is not Exuberant Ctags" % (self._executable_path)
+            raise TypeError("Executable file %s is not Exuberant Ctags" % (self._executable_path))
 
         comma = lines[0].find(',')
         self.__version = lines[0][len(self.__exuberant_id):comma].strip()
         if self.__version not in self.__supported_versions:
-            raise VersionException, "Version %s isn't known to work, but might." % self.__version
+            raise VersionException("Version %s isn't known to work, but might." % self.__version)
         
     def _dict_to_args(self, gen_opts):
         """
@@ -116,7 +116,7 @@ class exuberant_ctags(ctags_base):
         
         if 'generator_options' in kw:
             if '-f' in kw['generator_options'] or '-o' in kw['generator_options']:
-                raise ValueError, "The options -f and -o are used internally."
+                raise ValueError("The options -f and -o are used internally.")
             if '-L' in kw['generator_options']:
                 input_file_override = True
         
@@ -131,7 +131,7 @@ class exuberant_ctags(ctags_base):
             if self.ctags_executable('ctags'):
                 self._executable_path = 'ctags'
             else:
-                raise ValueError, "No ctags executable set."
+                raise ValueError("No ctags executable set.")
 
         gen_opts = copy(self.__default_opts)
         if 'generator_options' in kw:
@@ -168,7 +168,7 @@ class exuberant_ctags(ctags_base):
         (out, err) = p.communicate(input=file_list)
         
         if p.returncode != 0:
-            raise ValueError, "Ctags execution did not complete, return value: %d.\nCommand line: %s" % (p.returncode, self.command_line)
+            raise ValueError("Ctags execution did not complete, return value: %d.\nCommand line: %s" % (p.returncode, self.command_line))
         
         results = out.splitlines()
         
@@ -215,12 +215,12 @@ class exuberant_ctags(ctags_base):
                 else:
                     (head, tail) = os.path.split(output_file)
                     if len(head) == 0 and len(tail) == 0:
-                        raise ValueError, "no output file set"
+                        raise ValueError("no output file set")
                     if len(head) != 0:
                         if not os.path.isdir(head):
                             raise ValueError, "output directory %s does not exist" % (head)
         else:
-            raise ValueError, "no output file set"
+            raise ValueError("no output file set")
         
         (gen_opts, file_list) = self._prepare_to_generate(kwargs)
         gen_opts['-f'] = '"%s"' % output_file

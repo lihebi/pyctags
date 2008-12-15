@@ -66,7 +66,7 @@ class ctags_entry:
         entry = dict()
         if len(args) == 1:
             if len(kwargs):
-                raise ValueError, "multiple tag data found in init"
+                raise ValueError("multiple tag data found in init")
 
             if type(args[0]) == dict:
                 entry = args[0]
@@ -94,7 +94,7 @@ class ctags_entry:
                         try:
                             entry['line_number'] = int(locator)
                         except ValueError:
-                            raise ValueError, "Line number locator found for tag, but can't be converted to integer"
+                            raise ValueError("Line number locator found for tag, but can't be converted to integer")
                     else:
                         # should be a regex pattern
                         entry['pattern'] = locator
@@ -114,10 +114,10 @@ class ctags_entry:
                                         try:
                                             entry['line_number'] = int(v)
                                         except ValueError:
-                                            raise ValueError, "Extended tag 'line' found but can't be converted to integer."
+                                            raise ValueError("Extended tag 'line' found but can't be converted to integer.")
                                 else:
                                     if kind_arg_found:
-                                        raise ValueError, "Unknown extended tag found."
+                                        raise ValueError("Unknown extended tag found.")
                                     else:
                                         entry['extensions']['kind'] = ext
                                         kind_arg_found = True
@@ -135,12 +135,12 @@ class ctags_entry:
             
             self.short_filename = self.file[idx + 1:]
         else:
-            raise ValueError,"'file' parameter is required"
+            raise ValueError("'file' parameter is required")
 
         if 'name' in entry:
             self.name = str(entry['name'])
         else:
-            raise ValueError, "'name' parameter is required"
+            raise ValueError("'name' parameter is required")
 
         if 'pattern' in entry:
             self.pattern = str(entry['pattern'])
@@ -152,7 +152,7 @@ class ctags_entry:
             self.extensions = entry['extensions']
 
         if not self.line_number and not self.pattern:
-            raise ValueError, "No valid locator for this tag."
+            raise ValueError("No valid locator for this tag.")
 
         self.rep = entry
 
@@ -422,10 +422,10 @@ class ctags_file:
                     return self.__tags_by_str[i]
                 
     def __setitem__(self, i, v):
-        raise AttributeError, "can't set item"
+        raise AttributeError("can't set item")
     
     def __delitem__(self, i):
-        raise AttributeError, "can't delete item"
+        raise AttributeError("can't delete item")
     
     def __len__(self):
         return len(self.__sorted_tags)
