@@ -307,9 +307,9 @@ class ctags_file:
 
                 self.__tags_by_repr[repr(entry)] = entry
 
-        self.__sorted_tags.sort(cmp=lambda x, y: cmp(str(x), str(y)))
+        self.__sorted_tags.sort(key=str)
         self.__sorted_unique_tag_names = self.__tags_by_name.keys()
-        self.__sorted_unique_tag_names.sort(cmp=lambda x, y: cmp(x, y))
+        self.__sorted_unique_tag_names.sort()
         
         i = 0
         prev_char = self.__sorted_unique_tag_names[0][0]
@@ -357,10 +357,10 @@ class ctags_file:
         tag_names_that_start_with_char = []
         
         if case_sensitive:
-            if not self.__tag_index.has_key(matchstr[0]):
+            if matchstr[0] not in self.__tag_index:
                 return []
         else:
-            if not self.__tag_index.has_key(matchstr[0].lower()) and not self.__tag_index.has_key(matchstr[0].upper()):
+            if matchstr[0].lower() not in self.__tag_index and matchstr[0].upper() not in self.__tag_index:
                 return []
         
         if case_sensitive:
@@ -372,7 +372,7 @@ class ctags_file:
                 tag_names_that_start_with_char = self.__sorted_unique_tag_names[idxs['first']:idxs['last'] + 1]
             
         else:
-            if self.__tag_index.has_key(matchstr[0].lower()):
+            if matchstr[0].lower() in self.__tag_index:
                 idxs = self.__tag_index[matchstr[0].lower()]
                 
                 if idxs['first'] == idxs['last'] + 1:
@@ -380,7 +380,7 @@ class ctags_file:
                 else:
                     tag_names_that_start_with_char = self.__sorted_unique_tag_names[idxs['first']:idxs['last'] + 1]
 
-            if self.__tag_index.has_key(matchstr[0].upper()):
+            if matchstr[0].upper() in self.__tag_index:
                 idxs = self.__tag_index[matchstr[0].upper()]
                 
                 if idxs['first'] == idxs['last'] + 1:
