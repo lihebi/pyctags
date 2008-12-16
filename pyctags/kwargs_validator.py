@@ -45,6 +45,6 @@ class kwargs_validator:
         """
         for arg in args:
             if arg not in allowed_args:
-                raise ParameterError("Parameter '%s' is not accepted by calling function." % arg)
+                raise ParameterError("Parameter " + arg + " is not accepted by calling function.")
 
 the_validator = kwargs_validator()

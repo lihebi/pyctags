@@ -26,6 +26,13 @@ from copy import copy
 import os
 from kwargs_validator import the_validator as validator
 
+_PYTHON_3000_ = True
+
+import sys
+if sys.version_info[0] < 3:
+    _PYTHON_3000_ = False
+    
+
 class ctags_entry:
     """
     An entry in the tag file.
@@ -71,7 +78,7 @@ class ctags_entry:
             if type(args[0]) == dict:
                 entry = args[0]
 
-            elif type(args[0]) == str:
+            elif type(args[0]) == str or type(args[0]) == unicode:
                 
                 if args[0][0] == '{' and args[0][-1] == '}':
 
@@ -79,9 +86,14 @@ class ctags_entry:
                     entry = eval(args[0])
 
                 else:
+                    # bah!  uglies.
+                    if _PYTHON_3000_:
+                        argstr = args[0]
+                    else:
+                        argstr = unicode(args[0])
 
                     # this should be a tag line, could use some safety checking here though
-                    (entry['name'], entry['file'], the_rest) = args[0].split('\t', 2)
+                    (entry['name'], entry['file'], the_rest) = argstr.split('\t', 2)
     
                     extension_fields = None
     
@@ -161,8 +173,7 @@ class ctags_entry:
         
     def __str__(self):
         if self.name:
-            return ("%s:%s:%s") % (self.name, self.short_filename, 
-                self.line_number)
+            return self.name + ':' + self.short_filename + ':' + str(self.line_number)
         else:
             return "Unnamed tag."
         
@@ -290,7 +301,7 @@ class ctags_file:
                 try:
                     self.__HEADER_ITEMS[elements[0]](self, elements[1:])
                 except KeyError:
-                    print "Unknown header element '%s' at line %d." % (elements[0], line_number)
+                    print ("Unknown header comment element " + elements[0] + " at line " + line_number + ".")
             else:
 
                 entry = ctags_entry(line)
@@ -308,7 +319,7 @@ class ctags_file:
                 self.__tags_by_repr[repr(entry)] = entry
 
         self.__sorted_tags.sort(key=repr)
-        self.__sorted_unique_tag_names = self.__tags_by_name.keys()
+        self.__sorted_unique_tag_names = list(self.__tags_by_name.keys())
         self.__sorted_unique_tag_names.sort()
         
         i = 0

@@ -62,20 +62,17 @@ class exuberant_ctags(ctags_base):
         @raise TypeError: Executable is not Exuberant Ctags.
         """
         
-
-        shell_str = "%s %s" % (path, self.__version_opt)
+        shell_str = path + ' ' + self.__version_opt
 
         p = subprocess.Popen(shell_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         lines = p.stdout.readlines()
-
-        if lines[0].lower().find(self.__exuberant_id) < 0:
-            raise TypeError("Executable file %s is not Exuberant Ctags" % (self._executable_path))
-
-        comma = lines[0].find(',')
-        self.__version = lines[0][len(self.__exuberant_id):comma].strip()
+        outstr = lines[0].decode()
+        if outstr.lower().find(self.__exuberant_id) < 0:
+            raise TypeError("Executable file " + self._executable_path + " is not Exuberant Ctags")
+        comma = outstr.find(',')
+        self.__version = outstr[len(self.__exuberant_id):comma].strip()
         if self.__version not in self.__supported_versions:
-            raise VersionException("Version %s isn't known to work, but might." % self.__version)
-        
+            raise VersionException("Version " + self.__version + " isn't known to work, but might.")
     def _dict_to_args(self, gen_opts):
         """
         Converts from a dict with command line arguments to a string to feed exuberant ctags on the comand line.
@@ -88,23 +85,23 @@ class exuberant_ctags(ctags_base):
             lang_opts = ""
             if len(self.__extra_file_extensions):
                 for lang, exts in self.__extra_file_extensions.iteritems():
-                    lang_opts += "%s:+" % lang.lower()
+                    lang_opts += lang.lower() + ":+"
                     for ext in exts:
-                        lang_opts += "%s" % ext
+                        lang_opts += ext
             gen_opts['--langmap'] = lang_opts
             
         # because yargs sounds like a pirate
         yargs = ""
-        for k, v in gen_opts.iteritems():
+        for k, v in gen_opts.items():
             if k in self.__argless_args:
-                yargs += k + " "
+                yargs += k + ' '
                 continue
             if k[0:2] == '--':
                 # long opt
-                yargs += k + "=%s " % v
+                yargs += k + '=' + v
             elif k[0] == '-':
                 # short opt
-                yargs += k + " %s " % v
+                yargs += k + ' ' + v + ' '
                 
         return yargs
     
@@ -140,7 +137,7 @@ class exuberant_ctags(ctags_base):
         file_list = ''
         if not input_file_override:
             for f in self._file_list:
-                file_list += "%s\n" % f
+                file_list += f + "\n"
                 
         return (gen_opts, file_list)
         
@@ -163,14 +160,14 @@ class exuberant_ctags(ctags_base):
         (gen_opts, file_list) = self._prepare_to_generate(kwargs)
         tag_args = self._dict_to_args(gen_opts)
         
-        self.command_line = "%s %s" % (self._executable_path, tag_args)
+        self.command_line = self._executable_path + ' ' + tag_args
         p = subprocess.Popen(self.command_line, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        (out, err) = p.communicate(input=file_list)
+        (out, err) = p.communicate(input=file_list.encode())
         
         if p.returncode != 0:
-            raise ValueError("Ctags execution did not complete, return value: %d.\nCommand line: %s" % (p.returncode, self.command_line))
-        
-        results = out.splitlines()
+            raise ValueError("Ctags execution did not complete, return value: " + p.returncode + ".\nCommand line: " + self.command_line)
+        results = out.decode()
+        results = results.splitlines()
         
         # clean out anything that isn't formatted like a tag
         idxs = []
@@ -215,20 +212,20 @@ class exuberant_ctags(ctags_base):
                 else:
                     (head, tail) = os.path.split(output_file)
                     if len(head) == 0 and len(tail) == 0:
-                        raise ValueError("no output file set")
+                        raise ValueError("No output file set")
                     if len(head) != 0:
                         if not os.path.isdir(head):
-                            raise ValueError, "output directory %s does not exist" % (head)
+                            raise ValueError("Output directory " + head + " does not exist.")
         else:
-            raise ValueError("no output file set")
+            raise ValueError("No output file set")
         
         (gen_opts, file_list) = self._prepare_to_generate(kwargs)
-        gen_opts['-f'] = '"%s"' % output_file
+        gen_opts['-f'] = '"' + output_file + '"'
         tag_args = self._dict_to_args(gen_opts)
 
-        self.command_line = "%s %s" % (self._executable_path, tag_args)
+        self.command_line = self._executable_path + ' ' + tag_args
         p = subprocess.Popen(self.command_line, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        (out, err) = p.communicate(input=file_list)
+        (out, err) = p.communicate(input=file_list.encode())
         if (p.returncode == 0):
             return True
         return False

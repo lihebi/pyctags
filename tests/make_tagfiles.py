@@ -15,7 +15,7 @@ source_files = ['readtags.py', 'exuberant.py', 'ctags_base.py', 'kwargs_validato
 
 relpath_prefix = '../pyctags/'
 absolute_windows_prefixes = {'unc' : '\\\\lazarus\\pyctags\\pyctags\\', 
-                             'drive_letter' : 'C:\\Documents and Settings\\Ben\\Desktop\\random projects\\pyctags\\pyctags\\'
+                             'drive_letter' : 'C:\\Documents and Settings\\Ben\\Desktop\\pyctags\\pyctags\\'
                              }
 
 file_lists = dict()
@@ -51,7 +51,7 @@ def make_tagfiles():
             inp_line += "%s\n" % o
         p = subprocess.Popen(shell_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         
-        p.communicate(input=inp_line)
+        p.communicate(input=inp_line.encode())
         if p.returncode != 0:
             raise Exception
 

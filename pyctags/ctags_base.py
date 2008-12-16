@@ -81,7 +81,7 @@ class ctags_base:
             if rval:
                 try:
                     self._query_tag_generator(path)
-                except VersionException, e:
+                except VersionException:
                     pass
                 except:
                     rval = False

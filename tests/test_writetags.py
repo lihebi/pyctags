@@ -49,12 +49,12 @@ class test_exuberant_ctags(unittest.TestCase):
         self.failUnlessEqual(len(tags), 0)
     
     def test_no_ctags_set(self):
+        # TODO this test fails if ctags isn't found on the path
         ec = exuberant_ctags(files=file_lists['relpath'])
         tags = ec.generate_tags()
         self.failUnlessEqual(tags[0], tag_lists['relpath']['body'][0])
         
     def test_generate_tags(self):
-        # test parameter overrides
         ec = exuberant_ctags()
         tags = ec.generate_tags(tag_program='ctags', files=file_lists['relpath'])
         self.failUnlessEqual(tags[0], tag_lists['relpath']['body'][0])
