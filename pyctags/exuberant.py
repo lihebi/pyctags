@@ -73,6 +73,7 @@ class exuberant_ctags(ctags_base):
         self.__version = outstr[len(self.__exuberant_id):comma].strip()
         if self.__version not in self.__supported_versions:
             raise VersionException("Version " + self.__version + " isn't known to work, but might.")
+        
     def _dict_to_args(self, gen_opts):
         """
         Converts from a dict with command line arguments to a string to feed exuberant ctags on the comand line.
@@ -199,16 +200,17 @@ class exuberant_ctags(ctags_base):
         valid_kwargs = ['tag_program', 'files', 'generator_options']
         validator.validate(kwargs.keys(), valid_kwargs)
 
-        default_output_file = 'tags'
+        # exuberant ctags 5.7 chops 'def' off the beginning of variables, if it starts with def
+        _default_output_file = 'tags'
 
         if 'generator_options' in kwargs:
             if '-e' in kwargs['generator_options']:
-                default_output_file.upper()
+                _default_output_file.upper()
 
         if output_file:
             if output_file != "-":
                 if os.path.isdir(output_file):
-                    output_file = os.path.join(output_file, default_output_file)
+                    output_file = os.path.join(output_file, _default_output_file)
                 else:
                     (head, tail) = os.path.split(output_file)
                     if len(head) == 0 and len(tail) == 0:
