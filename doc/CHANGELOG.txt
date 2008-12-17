@@ -1,0 +1,7 @@
+* Python 3000 updates
+* implement container method on ctags_file so the in operator works correctly
+* changed internal sort to use repr() instead of str()
+
+
+0.4.0 December 13, 2008
+* Initial release.
