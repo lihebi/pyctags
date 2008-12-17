@@ -1,7 +1,5 @@
-* change generate_tagfile tests to use tmpfiles
-* scalability, very large projects (i.e. kernel source) take a long long while and should possibly give some feedback
-* add write() method to ctags_file, so the user can save it if they decide to
 * extend custom parameter tests for generation, particularly for situations where args are used internally
+* scalability, very large projects (i.e. kernel source) take a long long while and should possibly give some feedback
 * provide information on files that ctags didn't process but were in file list
 * add "queries" to tagfile for extended tag values, so you could list all methods, or all functions, or all Python, whatever
 * generate and store at runtime tags per-file, so that ctags doesn't have to be run on every file whenever one is changed

@@ -40,8 +40,9 @@ class test_exuberant_ctags(unittest.TestCase):
         ec.ctags_executable('/bin/ctags')
         
         ec = exuberant_ctags()
-        ec.generate_tagfile("generated_tags", tag_program=tag_program, files=file_lists['relpath'])
-        self.failIf(not os.path.exists("generated_tags"))
+        ec.generate_tagfile("generated.tags", tag_program=tag_program, files=file_lists['relpath'])
+        self.failIf(not os.path.exists("generated.tags"))
+        os.remove("generated.tags")
     
     def test_empty_list(self):
         ec = exuberant_ctags(tag_program=tag_program, files=[])
@@ -86,21 +87,20 @@ class test_exuberant_ctags(unittest.TestCase):
             self.failUnless(ec.generate_tagfile('C:\\tagfile'))
         
     def test_generate_tagfile(self):
-        # use tempfile instead
         ec = exuberant_ctags(tag_program=tag_program, files=file_lists['relpath'])
-        ec.generate_tagfile("generated_tags")
-        self.failIf(not os.path.exists("generated_tags"))
-        os.remove("generated_tags")
+        ec.generate_tagfile("generated.tags")
+        self.failIf(not os.path.exists("generated.tags"))
+        os.remove("generated.tags")
         
         ec = exuberant_ctags(tag_program=tag_program)
-        ec.generate_tagfile("generated_tags", files=file_lists['relpath'])
-        self.failIf(not os.path.exists("generated_tags"))
-        os.remove("generated_tags")
+        ec.generate_tagfile("generated.tags", files=file_lists['relpath'])
+        self.failIf(not os.path.exists("generated.tags"))
+        os.remove("generated.tags")
 
         ec = exuberant_ctags()
-        ec.generate_tagfile("generated_tags", tag_program=tag_program, files=file_lists['relpath'])
-        self.failIf(not os.path.exists("generated_tags"))
-        os.remove("generated_tags")
+        ec.generate_tagfile("generated.tags", tag_program=tag_program, files=file_lists['relpath'])
+        self.failIf(not os.path.exists("generated.tags"))
+        os.remove("generated.tags")
 
     def test_custom_params(self):
         ec = exuberant_ctags(tag_program=tag_program, files=file_lists['relpath'])
