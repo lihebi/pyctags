@@ -2,11 +2,12 @@
 
 import subprocess, sys
 
+tag_program = 'ctags'
+
 # set this to true to test system-specific absolute paths.
 # anyone testing this that isn't on my computer will need to adjust the paths to test this area
 extended_tests = False
 
-ctags = 'ctags'
 default_flags = '--excmd=pattern --langmap=python:+.pyw -L -'
 extended_flags = '--fields=+afiklmnsStz --excmd=pattern --langmap=python:+.pyw -L -'
 unextended_flags = '--format=1 --langmap=python:+.pyw -L -'
@@ -44,7 +45,7 @@ def make_tagfiles():
                            ]
 
     for opt in generation_options:
-        shell_cmd = "%s %s -f %s" % (ctags, opt[2], opt[1])
+        shell_cmd = "%s %s -f %s" % (tag_program, opt[2], opt[1])
         
         inp_line = ''
         for o in opt[0]:

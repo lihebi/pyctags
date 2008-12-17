@@ -31,6 +31,7 @@ entry_kwargs_line = {"name" : "testName", "file" : "../testFile", "line_number" 
 entry_kwargs_both = {"name" : "testName", "file" : "../testFile", "pattern" : "testPattern", "line_number" : 555, "extensions" : {"aa" : "aav", "bb" : "bbv"}}
 entry_kwargs_neither = {"name" : "testName", "file" : "../testFile", "extensions" : {"aa" : "aav", "bb" : "bbv"}}
 entry_kwargs_windows_path = {"name" : "testName", "file" : "C:\\foo\\bar\\testFile", "pattern" : "testPattern", "line_number" : 555, "extensions" : {"aa" : "aav", "bb" : "bbv"}}
+
 class test_ctags_entry(unittest.TestCase):
     
     def test_short_filename(self):
@@ -243,6 +244,8 @@ class test_ctags_file(unittest.TestCase):
     def test_starts_with_case_insensitive(self):
         tf = ctags_file(tag_lists['extended']['head'] + tag_lists['extended']['body'])
 
+        self.failUnless(len(tf))
+        
         atags = tf.starts_with('a')
         self.failUnlessEqual(len(atags), 0)
 
@@ -285,7 +288,9 @@ class test_ctags_file(unittest.TestCase):
     
     def test_extended_kinds(self):
         tf = ctags_file(tag_lists['extended']['body'])
-        self.failUnlessEqual(tf[0].extensions['kind'], 'v')
+        tf2 = ctags_file(tag_lists['relpath']['body'])
+        
+        self.failUnlessEqual(tf[0].extensions['kind'], tf2[0].extensions['kind'])
     
     def test_getitem(self):
         tf = ctags_file()

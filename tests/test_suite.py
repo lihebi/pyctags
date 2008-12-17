@@ -22,10 +22,13 @@ import unittest, sys
 sys.path.append('../pyctags')
 import test_readtags
 import test_writetags
+
 from kwargs_validator import ParameterError, the_validator as validator
 from exuberant import exuberant_ctags
 from readtags import ctags_file, ctags_entry
 from tag_lists import tag_lists
+
+tag_program = test_writetags.tag_program
 
 class kwargs_validator(unittest.TestCase):
     def test_validator(self):
@@ -43,7 +46,7 @@ class kwargs_validator(unittest.TestCase):
 class end_to_end(unittest.TestCase):
     def test_end_to_end(self):
         ec = exuberant_ctags()
-        tags = ec.generate_tags(tag_program='ctags', files=test_writetags.file_lists['relpath'])
+        tags = ec.generate_tags(tag_program=tag_program, files=test_writetags.file_lists['relpath'])
         tf = ctags_file(tags)
         tf2 = ctags_file(tag_lists['relpath']['head'] + tag_lists['relpath']['body'])
         i = 0
