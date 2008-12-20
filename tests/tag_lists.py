@@ -24,6 +24,7 @@ tag_lists = dict()
 files = list(file_lists.keys())
 files.append('extended')
 files.append('unextended')
+files.append('hyper_extended')
 
 for k in files:
     filename = "%s.tags" % k

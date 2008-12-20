@@ -335,10 +335,35 @@ class test_ctags_file(unittest.TestCase):
         tf = ctags_file(tag_lists['extended']['body'])
         self.failUnless('python' in tf.language_kinds)
         python_kinds = tf.language_kinds['python']
+
         self.failUnless('m' in python_kinds)
+        self.failUnless(type(python_kinds['m']) == list)
+        self.failUnless(len(python_kinds['m']))
+
         self.failUnless('c' in python_kinds)
+        self.failUnless(type(python_kinds['c']) == list)
+        self.failUnless(len(python_kinds['c']))
+
         self.failUnless('v' in python_kinds)
-        
+        self.failUnless(type(python_kinds['v']) == list)
+        self.failUnless(len(python_kinds['v']))
+
+        # now try the extended format that has full kind names
+        tf = ctags_file(tag_lists['hyper_extended']['body'])
+        self.failUnless('python' in tf.language_kinds)
+        python_kinds = tf.language_kinds['python']
+
+        self.failUnless('member' in python_kinds)
+        self.failUnless(type(python_kinds['member']) == list)
+        self.failUnless(len(python_kinds['member']))
+
+        self.failUnless('class' in python_kinds)
+        self.failUnless(type(python_kinds['class']) == list)
+        self.failUnless(len(python_kinds['class']))
+
+        self.failUnless('variable' in python_kinds)
+        self.failUnless(type(python_kinds['variable']) == list)
+        self.failUnless(len(python_kinds['variable']))
 
 if __name__ == '__main__':
     unittest.main()
