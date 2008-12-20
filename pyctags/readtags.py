@@ -32,6 +32,7 @@ import sys
 if sys.version_info[0] < 3:
     _PYTHON_3000_ = False
     
+_UNKNOWN_LANGUAGE_KEY_ = 'unspecified'
 
 class ctags_entry:
     """
@@ -232,6 +233,13 @@ class ctags_file:
         self.version_comment = None
         """ Tag program version comment."""
         
+        self.language_kinds = {}
+        """ 
+        dict of dicts of ctags_entry, primary key is language name, subkeys are exuberant ctags kinds.
+        If language tags are not found in the tag file, the primary key is set to 'unspecified'.
+        This is an empty dict when kind information is not harvested from the ctags file.
+        """
+        
         self.__tags_by_name = {}
         self.__tags_by_repr = {}
         self.__tags_by_str = {}
@@ -317,6 +325,20 @@ class ctags_file:
                 self.__tags_by_str[tmp].append(entry)
 
                 self.__tags_by_repr[repr(entry)] = entry
+                
+                langkey = _UNKNOWN_LANGUAGE_KEY_
+                if 'language' in entry.extensions:
+                    langkey = entry.extensions['language'].lower()
+
+                if langkey not in self.language_kinds:
+                    self.language_kinds[langkey] = dict()
+            
+                if 'kind' in entry.extensions:
+                    # note: case sensitive output from exuberant ctags
+                    entkey = entry.extensions['kind']
+                    if entkey not in self.language_kinds[langkey]:
+                        self.language_kinds[langkey][entkey] = list()
+                    self.language_kinds[langkey][entkey].append(entry)
 
         self.__sorted_tags.sort(key=repr)
         self.__sorted_unique_tag_names = list(self.__tags_by_name.keys())

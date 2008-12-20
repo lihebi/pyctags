@@ -329,6 +329,16 @@ class test_ctags_file(unittest.TestCase):
         for g in tf:
             i += 1
         self.failUnlessEqual(l, i)
+        
+        
+    def test_tag_kinds(self):
+        tf = ctags_file(tag_lists['extended']['body'])
+        self.failUnless('python' in tf.language_kinds)
+        python_kinds = tf.language_kinds['python']
+        self.failUnless('m' in python_kinds)
+        self.failUnless('c' in python_kinds)
+        self.failUnless('v' in python_kinds)
+        
 
 if __name__ == '__main__':
     unittest.main()
