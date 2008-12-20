@@ -108,13 +108,20 @@ class test_exuberant_ctags(unittest.TestCase):
         self.failUnless(ec.command_line.find(' -e ') > 0)
         
         # could use a few more tests here
-
+        # test the generated command line as well
+        
     def test_custom_input_files(self):
         ec = exuberant_ctags(tag_program=tag_program)
         ec.generate_tagfile("customtags", generator_options={'-L' : "relpath.txt"})
         self.failIf(not os.path.exists("customtags"))
         os.remove("customtags")
 
+    def test_exuberant_kinds(self):
+        ec = exuberant_ctags(tag_program=tag_program)
+        self.failUnless("python" in ec.language_info)
+        self.failUnless("c++" in ec.language_info)
+
+    
 
 if __name__ == '__main__':
     unittest.main()

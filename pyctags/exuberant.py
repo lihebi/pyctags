@@ -36,6 +36,7 @@ class exuberant_ctags(ctags_base):
     """
     __extra_file_extensions = {}
     __version_opt = "--version"
+    __list_kinds_opt = "--list-kinds"
     __argless_args = ["--version", "--help", "--license", "--list-languages", 
         "-a", "-B", "-e", "-F", "-n", "-N", "-R", "-u", "-V", "-w", "-x"]
     __default_opts = {"-L" : "-", "-f" : "-"}
@@ -52,8 +53,30 @@ class exuberant_ctags(ctags_base):
         """
         valid_kwargs = ['tag_program', 'files']
         validator.validate(kwargs.keys(), valid_kwargs)
-        ctags_base.__init__(self, *args, **kwargs)
+
         self.__version = None
+        self.language_info = None
+
+        ctags_base.__init__(self, *args, **kwargs)
+
+    def __process_kinds_list(self, kinds_list):
+        d = dict()
+        key = ""
+        for k in kinds_list:
+            if len(k):
+                if k[0].isspace():
+                    if len(key):
+                        kind_info = k.strip().split('  ')
+                        if len(kind_info) > 2:
+                            raise ValueError("Kind information is in an unexpected format.")
+                        d[key][kind_info[0]] = kind_info[1]
+                else:
+                    key = k.strip().lower()
+                    if key not in d:
+                        d[key] = dict()
+    
+        return d
+
 
     def _query_tag_generator(self, path):
         """
@@ -65,14 +88,21 @@ class exuberant_ctags(ctags_base):
         shell_str = path + ' ' + self.__version_opt
 
         p = subprocess.Popen(shell_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        lines = p.stdout.readlines()
-        outstr = lines[0].decode()
+        (out, err) = p.communicate()
+        outstr = out.decode()
         if outstr.lower().find(self.__exuberant_id) < 0:
             raise TypeError("Executable file " + self._executable_path + " is not Exuberant Ctags")
+        
         comma = outstr.find(',')
         self.__version = outstr[len(self.__exuberant_id):comma].strip()
         if self.__version not in self.__supported_versions:
             raise VersionException("Version " + self.__version + " isn't known to work, but might.")
+
+        # find out what this version of ctags supports in terms of language and kinds of tags
+        p = subprocess.Popen(path + ' ' + self.__list_kinds_opt, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        (out, err) = p.communicate()
+        
+        self.language_info = self.__process_kinds_list(out.decode().splitlines())
         
     def _dict_to_args(self, gen_opts):
         """
@@ -167,8 +197,8 @@ class exuberant_ctags(ctags_base):
         
         if p.returncode != 0:
             raise ValueError("Ctags execution did not complete, return value: " + p.returncode + ".\nCommand line: " + self.command_line)
-        results = out.decode()
-        results = results.splitlines()
+        
+        results = out.decode().splitlines()
         
         # clean out anything that isn't formatted like a tag
         idxs = []
