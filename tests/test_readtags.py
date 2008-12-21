@@ -20,7 +20,7 @@
 
 import unittest, sys
 sys.path.append("../pyctags")
-from readtags import ctags_entry, ctags_file
+from readtags import ctags_entry, ctags_file, _UNKNOWN_LANGUAGE_KEY_
 from make_tagfiles import file_lists
 from tag_lists import tag_lists
 
@@ -335,6 +335,25 @@ class test_ctags_file(unittest.TestCase):
         
         tf = ctags_file(tag_lists['unextended']['body'])
         self.failUnlessEqual(len(tf.language_kinds), 0)
+        
+        tf = ctags_file(tag_lists['no_kinds']['body'])
+        self.failUnlessEqual(len(tf.language_kinds), 0)
+        
+        tf = ctags_file(tag_lists['relpath']['body'])
+        self.failUnless(len(tf.language_kinds) == 1)
+        
+        python_kinds = tf.language_kinds[_UNKNOWN_LANGUAGE_KEY_]
+        self.failUnless('m' in python_kinds)
+        self.failUnless(type(python_kinds['m']) == list)
+        self.failUnless(len(python_kinds['m']))
+
+        self.failUnless('c' in python_kinds)
+        self.failUnless(type(python_kinds['c']) == list)
+        self.failUnless(len(python_kinds['c']))
+
+        self.failUnless('v' in python_kinds)
+        self.failUnless(type(python_kinds['v']) == list)
+        self.failUnless(len(python_kinds['v']))
         
         tf = ctags_file(tag_lists['extended']['body'])
         self.failUnless('python' in tf.language_kinds)

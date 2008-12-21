@@ -12,7 +12,7 @@ default_flags = '--excmd=pattern --langmap=python:+.pyw -L -'
 extended_flags = '--fields=+afiklmnsStz --excmd=pattern --langmap=python:+.pyw -L -'
 hyper_extended_flags = '--fields=+afiKlmnsStz --excmd=pattern -L -'
 unextended_flags = '--format=1 --langmap=python:+.pyw -L -'
-
+no_kinds_flags = '--fields=-k+afilmnsStz --excmd=pattern --langmap=python:+.pyw -L -'
 source_files = ['readtags.py', 'exuberant.py', 'ctags_base.py', 'kwargs_validator.py']
 
 relpath_prefix = '../pyctags/'
@@ -43,6 +43,7 @@ def make_tagfiles():
     
     generation_options += [[file_lists['relpath'], "extended.tags", extended_flags], 
                            [file_lists['relpath'], "hyper_extended.tags", hyper_extended_flags],
+                           [file_lists['relpath'], "no_kinds.tags", no_kinds_flags],
                            [file_lists['relpath'], "unextended.tags", unextended_flags]
                            ]
 

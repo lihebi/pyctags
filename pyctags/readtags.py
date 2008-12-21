@@ -69,7 +69,7 @@ class ctags_entry:
         """ If not none, dict of extension fields embedded in comments in the tag entry, from exuberant ctags."""
         self.short_filename = None
         """ Short version of filename, used in str representation."""
-        self.rep = None
+        self.__rep = None
         
         entry = dict()
         if len(args) == 1:
@@ -167,10 +167,10 @@ class ctags_entry:
         if not self.line_number and not self.pattern:
             raise ValueError("No valid locator for this tag.")
 
-        self.rep = entry
+        self.__rep = entry
 
     def __repr__(self):
-        return str(self.rep)
+        return str(self.__rep)
         
     def __str__(self):
         if self.name:
@@ -295,6 +295,7 @@ class ctags_file:
         @raises ValueError: parsing error
         """
 
+        extended_format = False
         if type(tags) == str:
             tags = open(tags).readlines()
 
@@ -313,6 +314,8 @@ class ctags_file:
             else:
 
                 entry = ctags_entry(line)
+                if not extended_format and (len(entry.extensions) > 0 or self.format == 2):
+                    extended_format = True
                 self.__sorted_tags.append(entry)
                 
                 if entry.name not in self.__tags_by_name:
@@ -326,19 +329,30 @@ class ctags_file:
 
                 self.__tags_by_repr[repr(entry)] = entry
                 
-                langkey = _UNKNOWN_LANGUAGE_KEY_
-                if 'language' in entry.extensions:
-                    langkey = entry.extensions['language'].lower()
-
+                if 'kind' in entry.extensions:
+                    langkey = _UNKNOWN_LANGUAGE_KEY_
+                    if 'language' in entry.extensions:
+                        langkey = entry.extensions['language'].lower()
+                        
                     if langkey not in self.language_kinds:
                         self.language_kinds[langkey] = dict()
+                        
+                    # note: case sensitive output from exuberant ctags
+                    entkey = entry.extensions['kind']
+                    if entkey not in self.language_kinds[langkey]:
+                        self.language_kinds[langkey][entkey] = list()
+                    self.language_kinds[langkey][entkey].append(entry)
                 
-                    if 'kind' in entry.extensions:
-                        # note: case sensitive output from exuberant ctags
-                        entkey = entry.extensions['kind']
-                        if entkey not in self.language_kinds[langkey]:
-                            self.language_kinds[langkey][entkey] = list()
-                        self.language_kinds[langkey][entkey].append(entry)
+
+                #if langkey not in self.language_kinds and len(entry.extensions):
+                    #self.language_kinds[langkey] = dict()
+            
+                #if 'kind' in entry.extensions:
+                    ## note: case sensitive output from exuberant ctags
+                    #entkey = entry.extensions['kind']
+                    #if entkey not in self.language_kinds[langkey]:
+                        #self.language_kinds[langkey][entkey] = list()
+                    #self.language_kinds[langkey][entkey].append(entry)
 
         self.__sorted_tags.sort(key=repr)
         self.__sorted_unique_tag_names = list(self.__tags_by_name.keys())
