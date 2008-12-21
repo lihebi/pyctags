@@ -332,6 +332,10 @@ class test_ctags_file(unittest.TestCase):
         
         
     def test_tag_kinds(self):
+        
+        tf = ctags_file(tag_lists['unextended']['body'])
+        self.failUnlessEqual(len(tf.language_kinds), 0)
+        
         tf = ctags_file(tag_lists['extended']['body'])
         self.failUnless('python' in tf.language_kinds)
         python_kinds = tf.language_kinds['python']

@@ -330,15 +330,15 @@ class ctags_file:
                 if 'language' in entry.extensions:
                     langkey = entry.extensions['language'].lower()
 
-                if langkey not in self.language_kinds:
-                    self.language_kinds[langkey] = dict()
-            
-                if 'kind' in entry.extensions:
-                    # note: case sensitive output from exuberant ctags
-                    entkey = entry.extensions['kind']
-                    if entkey not in self.language_kinds[langkey]:
-                        self.language_kinds[langkey][entkey] = list()
-                    self.language_kinds[langkey][entkey].append(entry)
+                    if langkey not in self.language_kinds:
+                        self.language_kinds[langkey] = dict()
+                
+                    if 'kind' in entry.extensions:
+                        # note: case sensitive output from exuberant ctags
+                        entkey = entry.extensions['kind']
+                        if entkey not in self.language_kinds[langkey]:
+                            self.language_kinds[langkey][entkey] = list()
+                        self.language_kinds[langkey][entkey].append(entry)
 
         self.__sorted_tags.sort(key=repr)
         self.__sorted_unique_tag_names = list(self.__tags_by_name.keys())
