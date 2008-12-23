@@ -137,13 +137,6 @@ class ctags_entry:
             
         if 'file' in entry:
             self.file = str(entry['file'])
-            
-            idx = self.file.rfind('/')
-            
-            if idx == -1:
-                idx = self.file.rfind("\\")
-            
-            self.short_filename = self.file[idx + 1:]
         else:
             raise ValueError("'file' parameter is required")
 
@@ -158,11 +151,12 @@ class ctags_entry:
         if 'line_number' in entry:
             self.line_number = int(entry['line_number'])
 
+        if not self.line_number and not self.pattern:
+            raise ValueError("No valid locator for this tag.")
+
         if 'extensions' in entry:
             self.extensions = entry['extensions']
 
-        if not self.line_number and not self.pattern:
-            raise ValueError("No valid locator for this tag.")
 
         self.__rep = entry
 
@@ -170,8 +164,15 @@ class ctags_entry:
         return str(self.__rep)
         
     def __str__(self):
+        idx = self.file.rfind('/')
+        
+        if idx == -1:
+            idx = self.file.rfind("\\")
+        
+        short_fn = self.file[idx + 1:]
+
         if self.name:
-            return self.name + ':' + self.short_filename + ':' + str(self.line_number)
+            return self.name + ':' + short_fn + ':' + str(self.line_number)
         else:
             return "Unnamed tag."
         

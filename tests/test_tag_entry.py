@@ -32,17 +32,6 @@ entry_kwargs_windows_path = {"name" : "testName", "file" : "C:\\foo\\bar\\testFi
 
 class test_ctags_entry(unittest.TestCase):
     
-    def test_short_filename(self):
-        d = entry_kwargs_windows_path
-        fn = d['file']
-        te = ctags_entry(**d)
-        self.failUnless(te.name == d['name'])
-        self.failUnless(te.file == fn)
-        self.failUnless(te.pattern == d['pattern'])
-        self.failUnless(te.line_number == d['line_number'])
-        self.failUnless(te.extensions == d['extensions'])
-        self.failUnless(te.short_filename == fn[fn.rfind("\\") + 1:])
-    
     def test_pattern_init(self):
         d = entry_kwargs_pattern
         fn = d['file']
@@ -52,7 +41,6 @@ class test_ctags_entry(unittest.TestCase):
         self.failUnless(te.pattern == d['pattern'])
         self.failUnless(te.line_number == None)
         self.failUnless(te.extensions == d['extensions'])
-        self.failUnless(te.short_filename == fn[fn.rfind("/") + 1:])
         
     def test_linenum_init(self):
         d = entry_kwargs_line
@@ -63,7 +51,6 @@ class test_ctags_entry(unittest.TestCase):
         self.failUnless(te.pattern == None)
         self.failUnless(te.line_number == d['line_number'])
         self.failUnless(te.extensions == d['extensions'])
-        self.failUnless(te.short_filename == fn[fn.rfind("/") + 1:])
 
     def test_both_init(self):
         d = entry_kwargs_both
@@ -74,7 +61,6 @@ class test_ctags_entry(unittest.TestCase):
         self.failUnless(te.pattern == d['pattern'])
         self.failUnless(te.line_number == d['line_number'])
         self.failUnless(te.extensions == d['extensions'])
-        self.failUnless(te.short_filename == fn[fn.rfind("/") + 1:])
 
     def test_neither_init(self):
         te = None
@@ -86,7 +72,8 @@ class test_ctags_entry(unittest.TestCase):
     
     def test_str(self):
         te = ctags_entry(**entry_kwargs_both)
-        should_be = "%s:%s:%s" % (te.name, te.short_filename, te.line_number)
+        short_fn = entry_kwargs_both['file'][entry_kwargs_both['file'].rfind("/") + 1:]
+        should_be = "%s:%s:%s" % (te.name, short_fn, te.line_number)
         self.failUnless(str(te) == should_be)
 
     def test_empty_tag(self):
@@ -112,7 +99,6 @@ class test_ctags_entry(unittest.TestCase):
         self.failUnless(te.pattern == None)
         self.failUnless(te.line_number == d['line_number'])
         self.failUnless(te.extensions == None)
-        self.failUnless(te.short_filename == fn[fn.rfind("/") + 1:])
         
     def test_min_pattern(self):
         d = entry_kwargs_min_pattern
@@ -123,7 +109,6 @@ class test_ctags_entry(unittest.TestCase):
         self.failUnless(te.pattern == d['pattern'])
         self.failUnless(te.line_number == None)
         self.failUnless(te.extensions == None)
-        self.failUnless(te.short_filename == fn[fn.rfind("/") + 1:])
         
     def test_missing_min(self):
         te = None
