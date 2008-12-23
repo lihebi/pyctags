@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ## Copyright (C) 2008 Ben Smith <benjamin.coder.smith@gmail.com>
 
 ##    This file is part of pyctags.
