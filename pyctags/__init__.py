@@ -92,4 +92,5 @@ projects than the Linux kernel, depending on the amount of system memory availab
 """
 
 from exuberant import exuberant_ctags
-from readtags import ctags_file, ctags_entry
+from ctags_file import ctags_file
+from ctags_entry import ctags_entry

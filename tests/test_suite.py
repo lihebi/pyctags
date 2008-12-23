@@ -20,12 +20,14 @@
 
 import unittest, sys
 sys.path.append('../pyctags')
-import test_readtags
+import test_tag_entry
+import test_tag_file
 import test_writetags
 
 from kwargs_validator import ParameterError, the_validator as validator
 from exuberant import exuberant_ctags
-from readtags import ctags_file, ctags_entry
+from ctags_file import ctags_file
+from ctags_entry import ctags_entry
 from tag_lists import tag_lists
 
 tag_program = test_writetags.tag_program
@@ -56,12 +58,14 @@ class end_to_end(unittest.TestCase):
         self.failUnlessEqual(len(tf.starts_with('t')), len(tf2.starts_with('t')))
 
 l = unittest.TestLoader()
-read_tests = l.loadTestsFromModule(test_readtags)
+entry_tests = l.loadTestsFromModule(test_tag_entry)
+file_tests = l.loadTestsFromModule(test_tag_file)
+
 write_tests = l.loadTestsFromModule(test_writetags)
 validator_tests = l.loadTestsFromTestCase(kwargs_validator)
 ends = l.loadTestsFromTestCase(end_to_end)
 
-alltests = unittest.TestSuite([read_tests, write_tests, validator_tests, ends])
+alltests = unittest.TestSuite([entry_tests, file_tests, write_tests, validator_tests, ends])
 
 r = unittest.TestResult()
 unittest.TextTestRunner().run(alltests)
