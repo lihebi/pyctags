@@ -19,7 +19,7 @@
 
 import subprocess, sys
 
-tag_program = 'ctags_svn'
+tag_program = 'ctags'
 
 # set this to true to test system-specific absolute paths.
 # anyone testing this that isn't on my computer will need to adjust the paths to test this area
