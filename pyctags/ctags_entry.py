@@ -32,14 +32,12 @@ import sys
 if sys.version_info[0] < 3:
     _PYTHON_3000_ = False
     
+_COMMENT_BEGIN_ = ';"'
 
 class ctags_entry:
     """
     An entry in the tag file.
     """
-    
-    __COMMENT_BEGIN = ';"'
-    
     def __init__(self, *args, **kwargs):
         """
         A tag entry from ctags file. Initializes from keyword args.
@@ -97,8 +95,8 @@ class ctags_entry:
     
                     extension_fields = None
     
-                    if the_rest.find(self.__COMMENT_BEGIN) > 0:
-                        (locator, junk, extension_fields) = the_rest.rpartition(self.__COMMENT_BEGIN)
+                    if the_rest.find(_COMMENT_BEGIN_) > 0:
+                        (locator, junk, extension_fields) = the_rest.rpartition(_COMMENT_BEGIN_)
                     else:
                         locator = the_rest
     
