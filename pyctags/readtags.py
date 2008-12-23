@@ -3,8 +3,8 @@
 ##    This file is part of pyctags.
 
 ##    pyctags is free software: you can redistribute it and/or modify
-##    it under the terms of the GNU Lesser General Public License as published by
-##    the Free Software Foundation, either version 3 of the License, or
+##    it under the terms of the GNU Lesser General Public License as published
+##    by the Free Software Foundation, either version 3 of the License, or
 ##    (at your option) any later version.
 
 ##    pyctags is distributed in the hope that it will be useful,
@@ -342,17 +342,6 @@ class ctags_file:
                     if entkey not in self.language_kinds[langkey]:
                         self.language_kinds[langkey][entkey] = list()
                     self.language_kinds[langkey][entkey].append(entry)
-                
-
-                #if langkey not in self.language_kinds and len(entry.extensions):
-                    #self.language_kinds[langkey] = dict()
-            
-                #if 'kind' in entry.extensions:
-                    ## note: case sensitive output from exuberant ctags
-                    #entkey = entry.extensions['kind']
-                    #if entkey not in self.language_kinds[langkey]:
-                        #self.language_kinds[langkey][entkey] = list()
-                    #self.language_kinds[langkey][entkey].append(entry)
 
         self.__sorted_tags.sort(key=repr)
         self.__sorted_unique_tag_names = list(self.__tags_by_name.keys())
