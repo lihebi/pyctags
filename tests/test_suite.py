@@ -23,6 +23,7 @@ sys.path.append('../pyctags')
 import test_tag_entry
 import test_tag_file
 import test_writetags
+import test_harvesting
 
 from kwargs_validator import ParameterError, the_validator as validator
 from exuberant import exuberant_ctags
@@ -59,13 +60,15 @@ class end_to_end(unittest.TestCase):
 
 l = unittest.TestLoader()
 entry_tests = l.loadTestsFromModule(test_tag_entry)
-file_tests = l.loadTestsFromModule(test_tag_file)
+tag_file_tests = l.loadTestsFromModule(test_tag_file)
 
 write_tests = l.loadTestsFromModule(test_writetags)
+harvest_tests = l.loadTestsFromModule(test_harvesting)
+
 validator_tests = l.loadTestsFromTestCase(kwargs_validator)
 ends = l.loadTestsFromTestCase(end_to_end)
 
-alltests = unittest.TestSuite([entry_tests, file_tests, write_tests, validator_tests, ends])
+alltests = unittest.TestSuite([write_tests, entry_tests, tag_file_tests, harvest_tests, validator_tests, ends])
 
 r = unittest.TestResult()
 unittest.TextTestRunner().run(alltests)

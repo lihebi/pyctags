@@ -33,20 +33,25 @@ class ctags_file:
     Heavyweight class that parses ctags generated files and provides multiple query interfaces.
     """
     
-    def __init__(self, tags=None):
+    def __init__(self, tags=None, **kwargs):
         """
         Heavyweight class that parses ctags generated files and provides 
         multiple query interfaces.
         @param tags: If I{tags} is a sequence, it will automatically be parsed.  If it is a filename or path, it will be opened and parsed.
         @type tags: sequence or str
+            - B{Keyword Arguments:}
+                - B{harvests:} (list) list of harvesting classes
         """
+        
+        valid_kwargs = ['harvests']
+        validator.validate(kwargs.keys(), valid_kwargs)
         
         self._clear_variables()
 
         if tags:
             if type(tags) == str:
                 tags = open(tags).readlines()
-            self.parse(tags)
+            self.parse(tags, **kwargs)
 
     def _clear_variables(self):
         """
@@ -131,15 +136,19 @@ class ctags_file:
         '!_TAG_PROGRAM_VERSION' : __header_version
     }
     
-    def parse(self, tags):
+    def parse(self, tags, **kwargs):
         """
         Parses ctags file and constructs data members.
         @param tags: Filename or sequence of tag strings to parse.
         @type tags: sequence or str
         @raises ValueError: parsing error
+            - B{Keyword Arguments:}
+                - B{harvests:} (list) list of harvesting classes
         """
 
-        extended_format = False
+        valid_kwargs = ['harvests']
+        validator.validate(kwargs.keys(), valid_kwargs)
+
         if type(tags) == str:
             tags = open(tags).readlines()
 
@@ -158,8 +167,10 @@ class ctags_file:
             else:
 
                 entry = ctags_entry(line)
-                if not extended_format and (len(entry.extensions) > 0 or self.format == 2):
-                    extended_format = True
+                if 'harvests' in kwargs:
+                    for harvest in kwargs['harvests']:
+                        harvest.feed(entry)
+
                 self.__sorted_tags.append(entry)
                 
                 if entry.name not in self.__tags_by_name:
@@ -172,20 +183,6 @@ class ctags_file:
                 self.__tags_by_str[tmp].append(entry)
 
                 self.__tags_by_repr[repr(entry)] = entry
-                
-                if 'kind' in entry.extensions:
-                    langkey = _UNKNOWN_LANGUAGE_KEY_
-                    if 'language' in entry.extensions:
-                        langkey = entry.extensions['language'].lower()
-                        
-                    if langkey not in self.language_kinds:
-                        self.language_kinds[langkey] = dict()
-                        
-                    # note: case sensitive output from exuberant ctags
-                    entkey = entry.extensions['kind']
-                    if entkey not in self.language_kinds[langkey]:
-                        self.language_kinds[langkey][entkey] = list()
-                    self.language_kinds[langkey][entkey].append(entry)
 
         self.__sorted_tags.sort(key=repr)
         self.__sorted_unique_tag_names = list(self.__tags_by_name.keys())
