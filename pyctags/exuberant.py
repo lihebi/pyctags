@@ -218,6 +218,8 @@ class exuberant_ctags(ctags_base):
     def generate_tagfile(self, output_file, **kwargs):
         """ 
         Generates tag file from list of files.
+        @param output_file: File name and location to write tagfile.
+        @type output_file: str
             - B{Keyword Arguments:}
                 - B{tag_program:} (str) path to ctags executable, or name of a ctags program in path
                 - B{files:} (sequence) files to process with ctags
