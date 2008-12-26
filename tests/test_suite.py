@@ -53,10 +53,9 @@ class end_to_end(unittest.TestCase):
         tf = ctags_file(tags)
         tf2 = ctags_file(tag_lists['relpath']['head'] + tag_lists['relpath']['body'])
         i = 0
-        for t in tf:
-            self.failUnless(t in tf2)
+        for t in tf.tags:
+            self.failUnless(t in tf2.tags)
             i += 1
-        self.failUnlessEqual(len(tf.starts_with('t')), len(tf2.starts_with('t')))
 
 l = unittest.TestLoader()
 entry_tests = l.loadTestsFromModule(test_tag_entry)
