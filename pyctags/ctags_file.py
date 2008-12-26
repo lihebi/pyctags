@@ -125,9 +125,9 @@ class ctags_file:
         Parses ctags file and constructs data members.
         @param tags: Filename or sequence of tag strings to parse.
         @type tags: sequence or str
-        @raises ValueError: parsing error
             - B{Keyword Arguments:}
                 - B{harvests:} (list) list of harvesting classes
+        @raises ValueError: parsing error
         """
 
         valid_kwargs = ['harvests']
@@ -168,3 +168,25 @@ class ctags_file:
 
         for harvest in harvests:
             harvest.do_after()
+
+    def harvest(self, harvests):
+        """
+        Used to perform new data harvests with already processed tags.
+        @param harvests: list of harvest classes to apply to existing tags.
+        @type harvests: list of instances supporting abstract_harvest interface.
+        @raises ValueError: if no tag data is available to process.
+        """
+        
+        if not len(self.tags):
+            raise ValueError("No tag data to harvest from.")
+        
+        for h in harvests:
+            h.set_tagfile(self)
+            h.do_before()
+        
+        for tag in self.tags:
+            h.feed(tag)
+            
+        for h in harvests:
+            h.do_after()
+            
