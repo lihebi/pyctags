@@ -87,6 +87,6 @@ set to represent all of in memory at once in python, though I'm hoping there are
 projects than the Linux kernel, depending on the amount of system memory available.
 """
 
-from exuberant import exuberant_ctags
-from ctags_file import ctags_file
-from ctags_entry import ctags_entry
+from pyctags.ctags_file import ctags_file
+from pyctags.ctags_entry import ctags_entry
+from pyctags.exuberant import exuberant_ctags

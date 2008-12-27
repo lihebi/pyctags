@@ -24,7 +24,7 @@ This module uses the eval function, which will let package users execute arbitra
 
 from copy import copy
 import os
-from kwargs_validator import the_validator as validator
+from pyctags.kwargs_validator import the_validator as validator
 
 _PYTHON_3000_ = True
 

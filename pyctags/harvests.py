@@ -18,7 +18,7 @@
 
 """ Classes that process tag data."""
 
-from kwargs_validator import the_validator as validator
+from pyctags.kwargs_validator import the_validator as validator
 from copy import copy
 
 class base_harvest:

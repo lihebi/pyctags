@@ -21,8 +21,8 @@ Python representation of ctags format file.
 """
 
 import os
-from kwargs_validator import the_validator as validator
-from ctags_entry import ctags_entry
+from pyctags.kwargs_validator import the_validator as validator
+from pyctags.ctags_entry import ctags_entry
 
 
 class ctags_file:

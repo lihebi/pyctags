@@ -23,7 +23,7 @@ This module uses the subprocess.Popen function.  Users of this module could pass
 """
 
 import subprocess
-from kwargs_validator import the_validator as validator
+from pyctags.kwargs_validator import the_validator as validator
 
 class VersionException(Exception):
     """
