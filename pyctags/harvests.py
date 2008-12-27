@@ -63,6 +63,24 @@ class base_harvest:
         @returns: ctags_file
         """
         return self._tag_file
+    
+    def forget_tagfile(self):
+        """
+        Removes reference to ctags_file so it can be garbage collected if memory is an issue.
+        """
+        self._tag_file = None
+
+    def process_tag_list(self, taglist):
+        """
+        Allows processing of a list of ctags_entry instances without an associated ctags_file.
+        @param taglist: list of ctags_entry instances
+        @type taglist: list
+        """
+        self.set_tagfile(None)
+        self.do_before()
+        for tag in taglist:
+            self.feed(tag)
+        self.do_after()
 
 class kind_harvest(base_harvest):
     """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
