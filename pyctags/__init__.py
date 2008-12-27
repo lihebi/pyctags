@@ -67,13 +67,18 @@ Here's a very small sample to show it in action::
     
     print len(tagfile.tags) # number of tags
 
-    from harvests import lookup_name_harvest, kind_harvest
+    from harvests import lookup_name_harvest, kind_harvest, by_name_harvest
     
     lookup = lookup_name_harvest()
     k_harvest = kind_harvest()
-    tagfile.harvest([lookup, kinds])
+    by_name_harvester = by_name_harvest()
+    tagfile.harvest([lookup, k_harvest, by_name_harvester])
     
+    by_name = by_name_harvester.retrieve_data()    
     f_tags = lookup.starts_with('f', case_sensitive=True) # print all tags that start with a lower case f
+    for tagname in ftags:
+        for tag in by_name[tagname]:
+            print (tag.name, tag.file, tag.line)
 
     kinds = k_harvest.retrieve_data()
     print(kinds['class']) # print all classes (from +K flag to exuberant ctags)
