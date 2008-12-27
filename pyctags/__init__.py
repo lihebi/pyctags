@@ -21,7 +21,7 @@
 """
 A ctags file reader and a wrapper to the command line program ctags.
 
-This package has been tested against exuberant ctags version 5.7 and SVN revision 686 on Windows XP and Linux with Python 2.5 and 2.6.
+This package has been tested against exuberant ctags version 5.7 and SVN revision 686 on Windows XP with Python 2.5, 2.6, and 3.0, and on Linux with Python 2.5.
 
 B{Security Notes:}
  - This package makes use of the subprocess.Popen() and eval() python constructs.  
@@ -67,7 +67,7 @@ Here's a very small sample to show it in action::
     
     print len(tagfile.tags) # number of tags
 
-    from harvests import lookup_name_harvest, kind_harvest, by_name_harvest
+    from pyctags.harvests import lookup_name_harvest, kind_harvest, by_name_harvest
     
     lookup = lookup_name_harvest()
     k_harvest = kind_harvest()
@@ -88,12 +88,11 @@ Here's a very small sample to show it in action::
 I'm not certain if ctags generators other than Exuberant Ctags are in much use, but wrappers for them can be derived from ctags_base.py.
 Feel free to contact me for or with details.
 
-Pyctags is currently unsuitable for extremely large projects.  I've used it to generate a custom kernel source tag file that came out to 153 MB,
-generation worked fine but I had to kill the tag parser - it was soaking up an enormous amount of RAM.  The kernel source is a very large data 
-set to represent all of in memory at once in python, though I'm hoping there are things I can do to address this.  Things will work fine on smaller
-projects than the Linux kernel, depending on the amount of system memory available.
+Pyctags is pretty heavy for large projects.  A 153 MB tag file generated from linux kernel sources takes a little while to 
+process and consumes over 1.1GB of RAM.  I hope to learn more ways to trim this down.
 """
 
 from pyctags.tag_file import ctags_file
 from pyctags.tag_entry import ctags_entry
 from pyctags.exuberant import exuberant_ctags
+import pyctags.harvests
