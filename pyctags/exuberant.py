@@ -226,7 +226,7 @@ class exuberant_ctags(ctags_base):
                 - B{generator_options:} (dict) options to pass to ctags program
             - B{Returns:}
                 - (boolean) file written
-            @raise ValueError: ctags executable path not set or output file isn't valid
+        @raise ValueError: ctags executable path not set or output file isn't valid
             
         """
         valid_kwargs = ['tag_program', 'files', 'generator_options']

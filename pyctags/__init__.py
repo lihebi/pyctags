@@ -43,10 +43,10 @@ Here's a very small sample to show it in action::
     taglist = ctags.generate(tag_program='/opt/bin/ctags', files=['/path/to/source.h', '/path/to/different/source.py', '../also/here.c'])
     
     # pass additional flags to exuberant ctags (file list stored from previous run or constructor)
-    taglist = ctags.generate_tags(generator_options={'--fields' : '+imn', '-F' : None}
+    taglist = ctags.generate_tags(generator_options={'--fields' : '+iKmn', '-F' : None}
 
     # you can generate a tag file instead
-    ctags.generate_tagfile(output_file_path, generator_options={'--fields' : '+imn'}, file_list=['../some_dir/src.s'])
+    ctags.generate_tagfile(output_file_path, generator_options={'--fields' : '+iKmn'}, file_list=['../some_dir/src.s'])
     
     # a few ways to parse into a ctags_file object
     tagfile = ctags_file(taglist)
@@ -65,22 +65,18 @@ Here's a very small sample to show it in action::
     # clears data from file_lines
     tagfile.parse("/path/to/tagfile")
     
-    print len(tagfile) # number of tags
+    print len(tagfile.tags) # number of tags
 
-    f_tags = tagfile.starts_with('f', case_sensitive=True) # print all tags that start with a lower case f
+    from harvests import lookup_name_harvest, kind_harvest
+    
+    lookup = lookup_name_harvest()
+    k_harvest = kind_harvest()
+    tagfile.harvest([lookup, kinds])
+    
+    f_tags = lookup.starts_with('f', case_sensitive=True) # print all tags that start with a lower case f
 
-    first_tag = tagfile[0]
-
-    for tag in tagfile:
-        print tag
-
-    taglist = tagfile['tagname'] # list of tags that match tagname
-
-    for tag in taglist:
-        print tag.name
-        print tag.line_number
-        print tag.pattern
-        print tag.extensions
+    kinds = k_harvest.retrieve_data()
+    print(kinds['class']) # print all classes (from +K flag to exuberant ctags)
         
 I'm not certain if ctags generators other than Exuberant Ctags are in much use, but wrappers for them can be derived from ctags_base.py.
 Feel free to contact me for or with details.

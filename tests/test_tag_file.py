@@ -67,8 +67,6 @@ class test_ctags_file(unittest.TestCase):
         for t in tf.tags:
             self.failUnlessEqual(t, tf2.tags[i])
             i += 1
-
-
     
     def test_extended_kinds(self):
         tf = ctags_file(tag_lists['extended']['body'])

@@ -16,40 +16,71 @@
 ##    and the GNU Lesser General Public Licens along with pyctags.  If not, 
 ##    see <http://www.gnu.org/licenses/>.
 
+""" Classes that process tag data."""
+
 from kwargs_validator import the_validator as validator
 from copy import copy
 
-class abstract_harvest:
+class base_harvest:
+    """ This class definition outlines the basic interface for harvesting classes."""
     def __init__(self, *args, **kwargs):
         self._tag_file = None
+        """ 
+        Reference to the ctags_file instance that contains the ctags_entry instances that were harvested.
+        Set by ctags_file.parse().
+        """
     
     def __len__(self, *args, **kwargs):
-        pass
-    
-    def feed(self, entry):
+        #unnecessary?
         pass
     
     def do_before(self):
+        """ Called before any entries are processed with self.feed()."""
+        pass
+    
+    def feed(self, entry):
+        """ Called once per ctags_entry.
+        @param entry: a tag entry to process.
+        @type entry: ctags_entry
+        """
         pass
     
     def do_after(self):
+        """ Called after all ctags_entry instances are processed with self.feed()."""
         pass
     
     def retrieve_data(self):
+        """ Used to retrieve derived-class specific harvested data."""
         pass
 
     def set_tagfile(self, tag_file):
+        """ Called by ctags_file when processing ctags_entry data."""
         self._tag_file = tag_file
-        
+    
+    def get_tagfile(self):
+        """
+        Returns reference to the ctags_file instance this data harvest processed.
+        @returns: ctags_file
+        """
+        return self._tag_file
 
-class kind_harvest(abstract_harvest):
+class kind_harvest(base_harvest):
+    """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
     def __init__(self, *args, **kwargs):
+        """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
         self.kinds = {}
     
     def __len__(self):
+        """
+        Number of unique kinds found in ctags_file.
+        """
         return len(self.kinds)
     
     def feed(self, entry):
+        """ Organizes data into a dict with kind as the keys, values are a list of entries of that kind.
+        @param entry: entry to process
+        @type entry: ctags_entry
+        """
         if 'kind' in entry.extensions:
             # note: case sensitive output from exuberant ctags
             entkey = entry.extensions['kind']
@@ -58,26 +89,38 @@ class kind_harvest(abstract_harvest):
             self.kinds[entkey].append(entry)
     
     def retrieve_data(self):
+        """ Hands over a reference to the dict built with self.feed().  
+        Dict keys are tag kinds, values are lists of ctags_entry instances sporting that kind.
+        @returns: dict
+        """
         return self.kinds
 
-
-class name_lookup_harvest(abstract_harvest):
+class name_lookup_harvest(base_harvest):
+    """ Builds a sorted list of unique tag names."""
     def __init__(self, *args, **kwargs):
+        """ Builds a sorted list of unique tag names."""
         self.__unique_names = dict()
         self.__sorted_names = list()
         self.__name_index = dict()
     
     def __len__(self):
+        """ Number of unique tag names found."""
         return len(self.__sorted_names)
     
     def feed(self, entry):
+        """ Records unique names.
+        @param entry: the entry to collect the name from.
+        @type entry: ctags_entry
+        """
+        # use dict characteristic of unique keys instead of testing if the key is already there
         self.__unique_names[entry.name] = None
     
     def do_after(self):
+        """ Process the unique names into a form easier to query."""
         self.__sorted_names = list(self.__unique_names.keys())
         self.__sorted_names.sort()
 
-        # don't need this any more
+        # don't need to haul this data around
         self.__unique_names = dict()
         
         i = 0
