@@ -112,13 +112,12 @@ class exuberant_ctags(ctags_base):
         @rtype: str
         """
         
-        if '--langmap' not in gen_opts:
+        if '--langmap' not in gen_opts and len(self.__extra_file_extensions):
             lang_opts = ""
-            if len(self.__extra_file_extensions):
-                for lang, exts in self.__extra_file_extensions.iteritems():
-                    lang_opts += lang.lower() + ":+"
-                    for ext in exts:
-                        lang_opts += ext
+            for lang, exts in self.__extra_file_extensions.iteritems():
+                lang_opts += lang.lower() + ":+"
+                for ext in exts:
+                    lang_opts += ext
             gen_opts['--langmap'] = lang_opts
             
         # because yargs sounds like a pirate
