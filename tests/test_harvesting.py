@@ -20,7 +20,7 @@ from unittest import TestCase, main as unittest_main
 import sys
 sys.path.append("../pyctags")
 from tag_file import ctags_file
-from harvests import kind_harvest, name_lookup_harvest
+from harvests import kind_harvest, name_lookup_harvest, by_name_harvest
 from tag_lists import tag_lists
 
 class TestHarvesting(TestCase):
@@ -34,7 +34,6 @@ class TestHarvesting(TestCase):
             self.failUnless(k in kinds)
             self.failUnless(type(kinds[k]), list)
             self.failUnless(len(kinds[k]))
-
 
     def test_kind_harvest(self):
 
@@ -59,6 +58,15 @@ class TestHarvesting(TestCase):
         for tag in tf.tags:
             if 'kind' in tag.extensions:
                 self.failUnless(tag in kinds[tag.extensions['kind']])
+
+    def test_by_name_harvest(self):
+        by_name_h = by_name_harvest()
+        tf = ctags_file(tag_lists['extended']['body'], harvests=[by_name_h])
+        name_dict = by_name_h.retrieve_data()
+        self.failUnless('ctags_entry' in name_dict)
+        self.failUnless(name_dict['ctags_entry'][0].name == 'ctags_entry')
+        self.failUnless(name_dict['ctags_entry'][0].extensions['kind'] == 'c')
+
 
     def test_name_lookup_harvest(self):
         lookup_harvest = name_lookup_harvest()
@@ -100,6 +108,6 @@ class TestHarvesting(TestCase):
         tags = lookup_harvest.starts_with('C', num_results=2, case_sensitive=False)
         self.failUnlessEqual(len(tags), 2)
 
-        
+
 if __name__ == '__main__':
     unittest_main()
