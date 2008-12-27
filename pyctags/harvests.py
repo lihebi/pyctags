@@ -95,6 +95,29 @@ class kind_harvest(base_harvest):
         """
         return self.kinds
 
+class by_name_harvest(base_harvest):
+    """ Organizes tags by name."""
+    def __init__(self, *args, **kwargs):
+        """ Organizes tags by name."""
+        self.names = dict()
+    
+    def __len__(self):
+        return len(self.names)
+
+    def feed(self, entry):
+        """
+        Builds a ctags_entry.name keyed dict.
+        """
+        if entry.name not in self.names:
+            self.names[entry.name] = list()
+        self.names[entry.name].append(entry)
+    
+    def retrieve_data(self):
+        """
+        @returns: dict of entries, entry.name as key, value is a list of ctags_entry instances that correspond to entry.name
+        """
+        return self.names
+
 class name_lookup_harvest(base_harvest):
     """ Builds a sorted list of unique tag names."""
     def __init__(self, *args, **kwargs):
