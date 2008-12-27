@@ -17,9 +17,14 @@
 ##    see <http://www.gnu.org/licenses/>.
 
 """ Classes that process tag data."""
-
-from pyctags.kwargs_validator import the_validator as validator
 from copy import copy
+
+try:
+    # do relative imports for tests
+    # try this first in case pyctags is already installed, since we want to be testing the source bundled in the distribution
+    from kwargs_validator import the_validator as validator
+except ImportError:
+    from pyctags.kwargs_validator import the_validator as validator
 
 class base_harvest:
     """ This class definition outlines the basic interface for harvesting classes."""

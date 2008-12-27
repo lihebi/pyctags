@@ -23,9 +23,16 @@ This module uses the subprocess.Popen function.  Users of this module could pass
 """
 import subprocess, os
 from copy import copy
-from pyctags.ctags_base import ctags_base, VersionException
-from pyctags.kwargs_validator import the_validator as validator
 
+try:
+    # do relative imports for tests
+    # try this first in case pyctags is already installed, since we want to be testing the source bundled in the distribution
+    from tag_base import ctags_base, VersionException
+    from kwargs_validator import the_validator as validator
+except ImportError:
+    from pyctags.tag_base import ctags_base, VersionException
+    from pyctags.kwargs_validator import the_validator as validator
+    
 
 class exuberant_ctags(ctags_base):
     """

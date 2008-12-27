@@ -30,7 +30,7 @@ extended_flags = '--fields=+afiklmnsStz --excmd=pattern --langmap=python:+.pyw -
 hyper_extended_flags = '--fields=+afiKlmnsStz --excmd=pattern -L -'
 unextended_flags = '--format=1 --langmap=python:+.pyw -L -'
 no_kinds_flags = '--fields=-k+afilmnsStz --excmd=pattern --langmap=python:+.pyw -L -'
-source_files = ['ctags_file.py', 'ctags_entry.py', 'exuberant.py', 'ctags_base.py', 'kwargs_validator.py']
+source_files = ['tag_file.py', 'tag_entry.py', 'exuberant.py', 'tag_base.py', 'kwargs_validator.py']
 
 relpath_prefix = '../pyctags/'
 absolute_windows_prefixes = {'unc' : '\\\\lazarus\\pyctags\\pyctags\\', 

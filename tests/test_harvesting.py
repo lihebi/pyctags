@@ -19,7 +19,7 @@
 from unittest import TestCase, main as unittest_main
 import sys
 sys.path.append("../pyctags")
-from ctags_file import ctags_file
+from tag_file import ctags_file
 from harvests import kind_harvest, name_lookup_harvest
 from tag_lists import tag_lists
 

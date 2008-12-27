@@ -19,8 +19,8 @@
 
 import unittest, sys
 sys.path.append("../pyctags")
-from ctags_file import ctags_file
-from ctags_entry import ctags_entry
+from tag_file import ctags_file
+from tag_entry import ctags_entry
 from tag_lists import tag_lists
 
 class test_ctags_file(unittest.TestCase):

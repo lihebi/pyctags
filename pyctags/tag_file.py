@@ -21,8 +21,14 @@ Python representation of ctags format file.
 """
 
 import os
-from pyctags.kwargs_validator import the_validator as validator
-from pyctags.ctags_entry import ctags_entry
+try:
+    # do relative imports for tests
+    # try this first in case pyctags is already installed, since we want to be testing the source bundled in the distribution
+    from kwargs_validator import the_validator as validator
+    from tag_entry import ctags_entry
+except ImportError:
+    from pyctags.kwargs_validator import the_validator as validator
+    from pyctags.tag_entry import ctags_entry
 
 
 class ctags_file:

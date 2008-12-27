@@ -19,7 +19,7 @@
 
 import unittest, sys
 sys.path.append("../pyctags")
-from ctags_entry import ctags_entry
+from tag_entry import ctags_entry
 
 
 entry_kwargs_pattern = {"name" : "testName", "file" : "../testFile", "pattern" : "testPattern", "extensions" : {"aa" : "aav", "bb" : "bbv"}}

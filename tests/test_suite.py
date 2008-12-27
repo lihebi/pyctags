@@ -19,7 +19,7 @@
 
 
 import unittest, sys
-sys.path.append('../pyctags')
+sys.path.append('../')
 import test_tag_entry
 import test_tag_file
 import test_writetags
@@ -27,8 +27,8 @@ import test_harvesting
 
 from kwargs_validator import ParameterError, the_validator as validator
 from exuberant import exuberant_ctags
-from ctags_file import ctags_file
-from ctags_entry import ctags_entry
+from tag_file import ctags_file
+from tag_entry import ctags_entry
 from tag_lists import tag_lists
 
 tag_program = test_writetags.tag_program
