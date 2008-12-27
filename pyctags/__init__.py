@@ -76,13 +76,15 @@ Here's a very small sample to show it in action::
     
     by_name = by_name_harvester.retrieve_data()    
     f_tags = lookup.starts_with('f', case_sensitive=True) # print all tags that start with a lower case f
+    
+    # get the full tag info from the name
     for tagname in ftags:
         for tag in by_name[tagname]:
             print (tag.name, tag.file, tag.line)
 
     kinds = k_harvest.retrieve_data()
     print(kinds['class']) # print all classes (from +K flag to exuberant ctags)
-        
+    
 I'm not certain if ctags generators other than Exuberant Ctags are in much use, but wrappers for them can be derived from ctags_base.py.
 Feel free to contact me for or with details.
 
