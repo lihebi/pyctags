@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import sys
 
-import pyctags
-
 from pyctags import exuberant_ctags, ctags_file
 from pyctags.harvests import name_lookup_harvest, by_name_harvest
 import os
