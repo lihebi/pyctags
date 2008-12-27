@@ -95,7 +95,8 @@ class kind_harvest(base_harvest):
         return len(self.kinds)
     
     def feed(self, entry):
-        """ Organizes data into a dict with kind as the keys, values are a list of entries of that kind.
+        """ 
+        Organizes data into a dict with kind as the keys, values are a list of entries of that kind.
         @param entry: entry to process
         @type entry: ctags_entry
         """
@@ -107,7 +108,8 @@ class kind_harvest(base_harvest):
             self.kinds[entkey].append(entry)
     
     def retrieve_data(self):
-        """ Hands over a reference to the dict built with self.feed().  
+        """
+        Hands over a reference to the dict built with self.feed().  
         Dict keys are tag kinds, values are lists of ctags_entry instances sporting that kind.
         @returns: dict
         """
