@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 import sys
 
-try:
-    import pyctags
-except ImportError:
-    # so you can run the sample without installing pyctags
-    sys.path.append("../")
+import pyctags
 
 from pyctags import exuberant_ctags, ctags_file
 from pyctags.harvests import name_lookup_harvest, by_name_harvest
@@ -25,14 +21,14 @@ names = name_lookup_harvest()
 by_name = by_name_harvest()
 tagfile = ctags_file(list_o_tags, harvests=[names, by_name])
 
-print "Found %d tags in %d source files." % (len(tagfile.tags), len(source_files))
+print ("Found %d tags in %d source files." % (len(tagfile.tags), len(source_files)))
 
 # this fetches unique names
 letter_tags = names.starts_with('c')
-print "%d individual names start with the letter c." % (len(letter_tags))
+print ("%d individual names start with the letter c." % (len(letter_tags)))
 by_name_tags = by_name.retrieve_data()
 
 for t in letter_tags:
     # there can be more than one occurance of a particular name
     for t2 in by_name_tags[t]:
-        print "\t%s is in %s on line %s." % (t2.name, t2.file, t2.line_number)
+        print ("\t%s is in %s on line %s." % (t2.name, t2.file, t2.line_number))
