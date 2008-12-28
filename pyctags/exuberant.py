@@ -148,6 +148,7 @@ class exuberant_ctags(ctags_base):
         """
         input_file_override = False
         
+        self.warnings = list()
         if 'generator_options' in kw:
             if '-f' in kw['generator_options'] or '-o' in kw['generator_options']:
                 raise ValueError("The options -f and -o are used internally.")
@@ -206,7 +207,7 @@ class exuberant_ctags(ctags_base):
         
         results = out.decode().splitlines()
         
-        # clean out anything that isn't formatted like a tag
+        # check for warning strings in output
         idxs = []
         i = 0
         for r in results:
@@ -214,10 +215,10 @@ class exuberant_ctags(ctags_base):
                 idxs.append(i)
             i += 1
 
-        # reverse the list so we don't mess up index numbers as we're deleting
+        # reverse the list so we don't mess up index numbers as we're removing them
         idxs.sort(reverse=True)
         for i in idxs:
-            del results[i]
+            self.warnings.append(results.pop(i))
 
         return results
 

@@ -58,9 +58,18 @@ class ctags_base:
         valid_kwargs = ['tag_program', 'files']
         validator.validate(kwargs.keys(), valid_kwargs)
         
-        self._file_list = []
+        self._file_list = list()
+        """ A list of file names to process."""
+
         self._executable_path = None
+        """ The ctags executable."""
+        
         self.command_line = None
+        """ The command line generated and used."""
+        
+        self.warnings = list()
+        """ A place to store warnings from ctags."""
+        
         if 'tag_program' in kwargs:
             if (self.ctags_executable(kwargs['tag_program'])):
                 self._executable_path = kwargs['tag_program']
