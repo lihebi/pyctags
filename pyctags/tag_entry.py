@@ -45,8 +45,9 @@ class ctags_entry:
     """
     def __init__(self, *args, **kwargs):
         """
-        A tag entry from ctags file. Initializes from keyword args.
-        
+        A tag entry from ctags file. Initializes from str or keyword args.
+            - B{Optional Parameters:}
+                - B{args[0]}: (str) a ctags_entry repr or string from a tag file
             - B{Keyword Arguments:}
                 - B{name}: (str) tag name
                 - B{file}: (str) source file name
@@ -82,18 +83,16 @@ class ctags_entry:
                 entry = args[0]
 
             elif type(args[0]) == str or type(args[0]) == unicode:
-                
                 if args[0][0] == '{' and args[0][-1] == '}':
-
+                    # expect this to be a repr string
                     # security anyone?
                     entry = eval(args[0])
 
                 else:
                     # bah!  uglies.
-                    if _PYTHON_3000_:
-                        argstr = args[0]
-                    else:
-                        argstr = unicode(args[0])
+                    argstr = args[0]
+                    if not _PYTHON_3000_ and type(argstr) is not unicode:
+                        argstr = unicode(argstr, "utf-8")
 
                     # this should be a tag line, could use some safety checking here though
                     (entry['name'], entry['file'], the_rest) = argstr.split('\t', 2)
@@ -141,17 +140,17 @@ class ctags_entry:
             entry = kwargs
             
         if 'file' in entry:
-            self.file = str(entry['file'])
+            self.file = entry['file']
         else:
             raise ValueError("'file' parameter is required")
 
         if 'name' in entry:
-            self.name = str(entry['name'])
+            self.name = entry['name']
         else:
             raise ValueError("'name' parameter is required")
 
         if 'pattern' in entry:
-            self.pattern = str(entry['pattern'])
+            self.pattern = entry['pattern']
 
         if 'line_number' in entry:
             self.line_number = int(entry['line_number'])

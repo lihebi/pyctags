@@ -25,7 +25,7 @@ try:
     # do relative imports for tests
     # try this first in case pyctags is already installed, since we want to be testing the source bundled in the distribution
     from kwargs_validator import the_validator as validator
-    from tag_entry import ctags_entry
+    from tag_entry import ctags_entry, _PYTHON_3000_
 except ImportError:
     from pyctags.kwargs_validator import the_validator as validator
     from pyctags.tag_entry import ctags_entry
@@ -156,6 +156,8 @@ class ctags_file:
 
         for rawline in tags:
             line = rawline.strip()
+            if not _PYTHON_3000_ and type(line) is not unicode:
+                line = unicode(line, "utf-8")
             if line[0] == '!':
                 # this is part of the file information header
                 elements = line.split('\t')
