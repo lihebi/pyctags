@@ -128,7 +128,7 @@ class ctags_file:
     
     def parse(self, tags, **kwargs):
         """
-        Parses ctags file and constructs data members.
+        Parses ctags file and constructs ctags_entry list.
         @param tags: Filename or sequence of tag strings to parse.
         @type tags: sequence or str
             - B{Keyword Arguments:}
@@ -140,6 +140,7 @@ class ctags_file:
         validator.validate(kwargs.keys(), valid_kwargs)
 
         if type(tags) == str:
+            # we can iterate over the file, it doesn't have to be in a list first
             tags = open(tags)
 
         self._clear_variables()
