@@ -140,7 +140,7 @@ class ctags_file:
         validator.validate(kwargs.keys(), valid_kwargs)
 
         if type(tags) == str:
-            tags = open(tags).readlines()
+            tags = open(tags)
 
         self._clear_variables()
         
