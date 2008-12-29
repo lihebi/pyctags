@@ -82,18 +82,18 @@ class ctags_entry:
             if type(args[0]) == dict:
                 entry = args[0]
 
-            elif type(args[0]) == str or type(args[0]) == unicode:
+            elif (type(args[0]) == str or type(args[0]) == unicode) and len(args[0]):
                 if args[0][0] == '{' and args[0][-1] == '}':
                     # expect this to be a repr string
                     # security anyone?
                     entry = eval(args[0])
 
                 else:
+                    argstr = args[0].strip()
                     # bah!  uglies.
-                    argstr = args[0]
                     if not _PYTHON_3000_ and type(argstr) is not unicode:
                         argstr = unicode(argstr, "utf-8")
-
+                    
                     # this should be a tag line, could use some safety checking here though
                     (entry['name'], entry['file'], the_rest) = argstr.split('\t', 2)
     
