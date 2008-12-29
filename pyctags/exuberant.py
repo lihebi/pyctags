@@ -24,15 +24,17 @@ This module uses the subprocess.Popen function.  Users of this module could pass
 import subprocess, os
 from copy import copy
 
+
 try:
     # do relative imports for tests
     # try this first in case pyctags is already installed, since we want to be testing the source bundled in the distribution
     from tag_base import ctags_base, VersionException
     from kwargs_validator import the_validator as validator
+    from tag_file import ctags_file
 except ImportError:
     from pyctags.tag_base import ctags_base, VersionException
     from pyctags.kwargs_validator import the_validator as validator
-    
+    from pyctags import ctags_file
 
 class exuberant_ctags(ctags_base):
     """
@@ -175,7 +177,7 @@ class exuberant_ctags(ctags_base):
         file_list = ''
         if not input_file_override:
             for f in self._file_list:
-                file_list += f + "\n"
+                file_list += f + os.linesep
                 
         return (gen_opts, file_list)
         
@@ -270,3 +272,56 @@ class exuberant_ctags(ctags_base):
         if (p.returncode == 0):
             return True
         return False
+
+    def generate_object(self, **kwargs):
+        """
+        Parses source files into a ctags_file instance.
+        This method exists to avoid storing ctags generated data in an intermediate form before parsing.
+        According to python documentation, this mechanism could deadlock due to other OS pipe buffers filling and blocking the child process.
+        http://docs.python.org/library/subprocess.html
+            - B{Keyword Arguments:}
+                - B{tag_program:} (str) path to ctags executable, or name of a ctags program in path
+                - B{files:} (sequence) files to process with ctags
+                - B{generator_options:} (dict) options to pass to ctags program
+                - B{harvests:} (list) list of harvest data classes for ctags_file to use while parsing
+            - B{Returns:}
+                - (ctags_file or None) generated instance of ctags_file on success, None on failure
+        @raise ValueError: ctags executable path not set
+        """
+        valid_kwargs = ['tag_program', 'files', 'generator_options', 'harvests']
+        validator.validate(kwargs.keys(), valid_kwargs)
+        
+        (gen_opts, file_list) = self._prepare_to_generate(kwargs)
+        tag_args = self._dict_to_args(gen_opts)
+        
+        tagfile = ctags_file()
+
+        harvests = list()
+        if 'harvests' in kwargs:
+            harvests = kwargs['harvests']
+            
+        tagfile.feed_init(harvests=harvests)
+
+        self.command_line = self._executable_path + ' ' + tag_args
+        p = subprocess.Popen(self.command_line, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        p.stdin.write(file_list.encode())
+        
+        # is this the cleanest way to do this?  it makes the program execute, but I haven't found another way
+        p.stdin.close()
+
+        while p.poll() is None:
+            line = p.stdout.readline().decode("utf-8")
+            if not len(line):
+                continue
+            if line[:len(self.__warning_str)] == self.__warning_str:
+                self.warnings.append(line)
+            else:
+                tagfile.feed_line(line)
+        
+        tagfile.feed_finish()
+        
+        if p.returncode == 0:
+            return tagfile
+        else:
+            return None
+        

@@ -23,6 +23,7 @@ sys.path.append("../pyctags")
 from exuberant import exuberant_ctags
 from tag_lists import tag_lists
 from make_tagfiles import file_lists, extended_tests, tag_program
+from tag_file import ctags_file
 
 
 class test_exuberant_ctags(unittest.TestCase):
@@ -131,6 +132,18 @@ class test_exuberant_ctags(unittest.TestCase):
 
         ec.generate_tags(files=file_lists['relpath'])
         self.failUnlessEqual(len(ec.warnings), 0)
+    
+    def test_generate_object(self):
+        ec = exuberant_ctags(tag_program=tag_program, files=file_lists['relpath'])
+        tf = ec.generate_object()
+        tf2 = ctags_file(tag_lists['relpath']['body'])
+        
+        self.failIfEqual(tf, None)
+        self.failUnless(len(tf.tags))
+        i = 0
+        for tag in tf.tags:
+            self.failUnlessEqual(repr(tag), repr(tf2.tags[i]))
+            i += 1
         
 if __name__ == '__main__':
     unittest.main()

@@ -168,9 +168,6 @@ class name_lookup_harvest(base_harvest):
         self.__sorted_names = list(self.__unique_names.keys())
         self.__sorted_names.sort()
 
-        # don't need to haul this data around
-        self.__unique_names = dict()
-        
         i = 0
         prev_char = self.__sorted_names[0][0]
         self.__name_index[prev_char] = {'first' : 0}

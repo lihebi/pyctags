@@ -86,6 +86,9 @@ class ctags_file:
         self.tags = list()
         """ List of ctags_entry elements."""
         
+        self.__feed_harvests = list()
+        """ List of harvests used when parsing ctags output on the fly."""
+        
     def __header_format(self, line):
         """ Processes !_ctags_file_FORMAT ctags header."""
         if not self.format:
@@ -155,12 +158,14 @@ class ctags_file:
             
         line_number = 1
 
-        for rawline in tags:
-            line = rawline.strip()
+        for line in tags:
+            
             if not _PYTHON_3000_ and type(line) is not unicode:
                 line = unicode(line, "utf-8")
+            
             if line[0] == '!':
                 # this is part of the file information header
+                line = line.strip()
                 elements = line.split('\t')
                 try:
                     self.__HEADER_ITEMS[elements[0]](self, elements[1:])
@@ -194,8 +199,50 @@ class ctags_file:
             h.do_before()
         
         for tag in self.tags:
-            h.feed(tag)
+            # order n^2
+            for h in harvests:
+                h.feed(tag)
             
         for h in harvests:
             h.do_after()
             
+
+    def feed_init(self, **kwargs):
+        """
+        Initializes ctags_file data members and possible data harvests.
+            - B{Keyword Arguments:}
+                - B{harvests:} (list) list of harvesting classes
+        @raises ValueError: parsing error
+        """
+
+        valid_kwargs = ['harvests']
+        validator.validate(kwargs.keys(), valid_kwargs)
+        
+        self._clear_variables()
+
+        self.__feed_harvests = list()
+        if 'harvests' in kwargs:
+            self.__feed_harvests = kwargs['harvests']
+            
+        for h in self.__feed_harvests:
+            h.set_tagfile(self)
+            h.do_before()
+
+    def feed_line(self, tagline):
+        """
+        Used to parse new ctags formatted output and new tags to the end of the tags list.
+        @param tagline: line from ctags output file
+        @type tagline: unicode str
+        """
+
+        entry = ctags_entry(tagline)
+        self.tags.append(entry)
+        for h in self.__feed_harvests:
+            h.feed(entry)
+
+    def feed_finish(self):
+        """ Finalizes data harvests from tag line feed.  Drops references to harvests."""
+        for h in self.__feed_harvests:
+            h.do_after()
+        # drop the references to the harvests
+        self.__feed_harvests = list()
