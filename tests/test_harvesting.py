@@ -27,7 +27,7 @@ class TestHarvesting(TestCase):
     def do_kind_harvest(self, taglist):
         kh = kind_harvester()
         tf = ctags_file(taglist, harvests=[kh])
-        return (tf, kh.retrieve_data())
+        return (tf, kh.get_data())
     
     def check_kind_keys(self, kinds, keys):
         for k in keys:
@@ -62,7 +62,7 @@ class TestHarvesting(TestCase):
     def test_by_name_harvester(self):
         by_name_h = by_name_harvester()
         tf = ctags_file(tag_lists['extended']['body'], harvests=[by_name_h])
-        name_dict = by_name_h.retrieve_data()
+        name_dict = by_name_h.get_data()
         self.failUnless('ctags_entry' in name_dict)
         self.failUnless(name_dict['ctags_entry'][0].name == 'ctags_entry')
         self.failUnless(name_dict['ctags_entry'][0].extensions['kind'] == 'c')

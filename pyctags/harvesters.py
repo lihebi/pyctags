@@ -54,7 +54,7 @@ class base_harvester:
         """ Called after all ctags_entry instances are processed with self.feed()."""
         pass
     
-    def retrieve_data(self):
+    def get_data(self):
         """ Used to retrieve derived-class specific harvested data."""
         pass
 
@@ -112,9 +112,9 @@ class kind_harvester(base_harvester):
                 self.kinds[entkey] = list()
             self.kinds[entkey].append(entry)
     
-    def retrieve_data(self):
+    def get_data(self):
         """
-        Hands over a reference to the dict built with self.feed().  
+        Gets the dict built with self.feed().  
         Dict keys are tag kinds, values are lists of ctags_entry instances sporting that kind.
         @returns: dict
         """
@@ -137,7 +137,7 @@ class by_name_harvester(base_harvester):
             self.names[entry.name] = list()
         self.names[entry.name].append(entry)
     
-    def retrieve_data(self):
+    def get_data(self):
         """
         @returns: dict of entries, entry.name as key, value is a list of ctags_entry instances that correspond to entry.name
         """

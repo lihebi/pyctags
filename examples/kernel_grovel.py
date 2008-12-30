@@ -55,10 +55,10 @@ for name in names.starts_with("absE", case_sensitive=True):
 print ("Wait a little more...")
 kind_harvest = pyctags.harvesters.kind_harvester()
 kind_harvest.process_tag_list(tf.tags)
-kind_dict = kind_harvest.retrieve_data()
+kind_dict = kind_harvest.get_data()
 
 kinds_by_name = pyctags.harvesters.by_name_harvester()
 kinds_by_name.process_tag_list(kind_dict['struct'])
-struct_name_dict = kinds_by_name.retrieve_data()
+struct_name_dict = kinds_by_name.get_data()
 
 print("\nIf you felt like it, you could find out that the first (and only) struct that's called 'frag' is in file %s on line %d." % (struct_name_dict['frag'][0].file, struct_name_dict['frag'][0].line_number))
