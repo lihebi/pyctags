@@ -2,7 +2,7 @@
 import sys
 
 from pyctags import exuberant_ctags, ctags_file
-from pyctags.harvests import name_lookup_harvest, by_name_harvest
+from pyctags.harvesters import name_lookup_harvester, by_name_harvester
 import os
 
 source_files = list()
@@ -15,8 +15,8 @@ for (dirpath, dirs, files) in os.walk("../"):
 generator = exuberant_ctags(files=source_files)
 list_o_tags = generator.generate_tags(generator_options={'--fields' : '+n'})
 
-names = name_lookup_harvest()
-by_name = by_name_harvest()
+names = name_lookup_harvester()
+by_name = by_name_harvester()
 tagfile = ctags_file(list_o_tags, harvests=[names, by_name])
 
 print ("Found %d tags in %d source files." % (len(tagfile.tags), len(source_files)))

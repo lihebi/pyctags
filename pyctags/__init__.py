@@ -95,4 +95,4 @@ process and consumes over 1.1GB of RAM.  I hope to learn more ways to trim this 
 from pyctags.tag_file import ctags_file
 from pyctags.tag_entry import ctags_entry
 from pyctags.exuberant import exuberant_ctags
-import pyctags.harvests
+import pyctags.harvesters

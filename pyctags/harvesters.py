@@ -26,7 +26,7 @@ try:
 except ImportError:
     from pyctags.kwargs_validator import the_validator as validator
 
-class base_harvest:
+class base_harvester:
     """ This class definition outlines the basic interface for harvesting classes."""
     def __init__(self, *args, **kwargs):
         self._tag_file = None
@@ -87,7 +87,7 @@ class base_harvest:
             self.feed(tag)
         self.do_after()
 
-class kind_harvest(base_harvest):
+class kind_harvester(base_harvester):
     """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
     def __init__(self, *args, **kwargs):
         """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
@@ -120,7 +120,7 @@ class kind_harvest(base_harvest):
         """
         return self.kinds
 
-class by_name_harvest(base_harvest):
+class by_name_harvester(base_harvester):
     """ Organizes tags by name."""
     def __init__(self, *args, **kwargs):
         """ Organizes tags by name."""
@@ -143,7 +143,7 @@ class by_name_harvest(base_harvest):
         """
         return self.names
 
-class name_lookup_harvest(base_harvest):
+class name_lookup_harvester(base_harvester):
     """ Builds a sorted list of unique tag names."""
     def __init__(self, *args, **kwargs):
         """ Builds a sorted list of unique tag names."""

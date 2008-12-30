@@ -1,8 +1,7 @@
 import pyctags, os, time, sys
 
-## This program takes over six minutes on an AMD Athlon 64 3000+ and 
-## consumes over 1GB of RAM.  It'd probably be significantly slower if less memory is
-## is available.
+## This program can take over six minutes on an AMD Athlon 64 3000+ and 
+## consumes over 1GB of RAM.  
 
 
 srcdir = "../../temp extracts/linux-2.6.27"
@@ -26,7 +25,7 @@ tf = pyctags.exuberant_ctags().generate_object(files=source_files, generator_opt
 
 print ("%d tags parsed in %.2f seconds." % (len(tf.tags), time.clock() - cl))
 cl = time.clock()
-names = pyctags.harvests.name_lookup_harvest()
+names = pyctags.harvesters.name_lookup_harvester()
 names.process_tag_list(tf.tags)
 print ("Name index took %.2f seconds to build." % (time.clock() - cl))
 
@@ -54,11 +53,11 @@ for name in names.starts_with("absE", case_sensitive=True):
     print ("\t%s" % (name))
 
 print ("Wait a little more...")
-kind_harvest = pyctags.harvests.kind_harvest()
+kind_harvest = pyctags.harvesters.kind_harvester()
 kind_harvest.process_tag_list(tf.tags)
 kind_dict = kind_harvest.retrieve_data()
 
-kinds_by_name = pyctags.harvests.by_name_harvest()
+kinds_by_name = pyctags.harvesters.by_name_harvester()
 kinds_by_name.process_tag_list(kind_dict['struct'])
 struct_name_dict = kinds_by_name.retrieve_data()
 
