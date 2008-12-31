@@ -19,6 +19,8 @@
 ##    see <http://www.gnu.org/licenses/>.
 
 
+# this program will only map out first-generation subclasses and doesn't handle multiple inheritance
+
 import pyctags, os
 srcdir = "../pyctags/"
 
