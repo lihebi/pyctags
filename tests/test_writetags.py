@@ -141,9 +141,9 @@ class test_exuberant_ctags(unittest.TestCase):
         self.failIfEqual(tf, None)
         self.failUnless(len(tf.tags))
         i = 0
-        for tag in tf.tags:
-            self.failUnlessEqual(repr(tag), repr(tf2.tags[i]))
+        for tag in tf2.tags:
+            self.failUnlessEqual(repr(tag), repr(tf.tags[i]))
             i += 1
-        
+            
 if __name__ == '__main__':
     unittest.main()

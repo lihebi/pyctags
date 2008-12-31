@@ -317,7 +317,16 @@ class exuberant_ctags(ctags_base):
                 self.warnings.append(line)
             else:
                 tagfile.feed_line(line)
-        
+
+        # process the remaining buffer 
+        for line in p.stdout.read().decode("utf-8").splitlines():
+            if not len(line):
+                continue
+            if line[:len(self.__warning_str)] == self.__warning_str:
+                self.warnings.append(line)
+            else:
+                tagfile.feed_line(line)
+            
         tagfile.feed_finish()
         
         if p.returncode == 0:
