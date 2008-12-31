@@ -28,7 +28,7 @@ try:
     from tag_entry import ctags_entry, _PYTHON_3000_
 except ImportError:
     from pyctags.kwargs_validator import the_validator as validator
-    from pyctags.tag_entry import ctags_entry
+    from pyctags.tag_entry import ctags_entry, _PYTHON_3000_
 
 
 class ctags_file:
@@ -41,10 +41,10 @@ class ctags_file:
         @param tags: If I{tags} is a sequence, it will automatically be parsed.  If it is a filename or path, it will be opened and parsed.
         @type tags: sequence or str
             - B{Keyword Arguments:}
-                - B{harvests:} (list) list of harvesting classes
+                - B{harvesters:} (list) list of harvester classes
         """
         
-        valid_kwargs = ['harvests']
+        valid_kwargs = ['harvesters']
         validator.validate(kwargs.keys(), valid_kwargs)
         
         self._clear_variables()
@@ -86,8 +86,8 @@ class ctags_file:
         self.tags = list()
         """ List of ctags_entry elements."""
         
-        self.__feed_harvests = list()
-        """ List of harvests used when parsing ctags output on the fly."""
+        self.__feed_harvesters = list()
+        """ List of harvesters used when parsing ctags output on the fly."""
         
     def __header_format(self, line):
         """ Processes !_ctags_file_FORMAT ctags header."""
@@ -135,11 +135,11 @@ class ctags_file:
         @param tags: Filename or sequence of tag strings to parse.
         @type tags: sequence or str
             - B{Keyword Arguments:}
-                - B{harvests:} (list) list of harvesting classes
+                - B{harvesters:} (list) list of harvester classes
         @raises ValueError: parsing error
         """
 
-        valid_kwargs = ['harvests']
+        valid_kwargs = ['harvesters']
         validator.validate(kwargs.keys(), valid_kwargs)
 
         if type(tags) == str:
@@ -148,13 +148,13 @@ class ctags_file:
 
         self._clear_variables()
         
-        harvests = list()
-        if 'harvests' in kwargs:
-            harvests = kwargs['harvests']
+        harvesters = list()
+        if 'harvesters' in kwargs:
+            harvesters = kwargs['harvesters']
             
-        for harvest in harvests:
-            harvest.set_tagfile(self)
-            harvest.do_before()
+        for harvester in harvesters:
+            harvester.set_tagfile(self)
+            harvester.do_before()
             
         line_number = 1
 
@@ -175,56 +175,56 @@ class ctags_file:
                 entry = ctags_entry(line)
 
                 self.tags.append(entry)
-                for harvest in harvests:
-                    harvest.feed(entry)
+                for harvester in harvesters:
+                    harvester.feed(entry)
 
             line_number += 1
 
-        for harvest in harvests:
-            harvest.do_after()
+        for harvester in harvesters:
+            harvester.do_after()
 
-    def harvest(self, harvests):
+    def harvest(self, harvesters):
         """
-        Used to perform new data harvests with already processed tags.
-        @param harvests: list of harvest classes to apply to existing tags.
-        @type harvests: list of instances supporting abstract_harvest interface.
+        Used to perform new data harvesters with already processed tags.
+        @param harvesters: list of harvest classes to apply to existing tags.
+        @type harvesters: list of instances supporting base_harvester interface.
         @raises ValueError: if no tag data is available to process.
         """
         
         if not len(self.tags):
             raise ValueError("No tag data to harvest from.")
         
-        for h in harvests:
+        for h in harvesters:
             h.set_tagfile(self)
             h.do_before()
         
         for tag in self.tags:
             # order n^2
-            for h in harvests:
+            for h in harvesters:
                 h.feed(tag)
             
-        for h in harvests:
+        for h in harvesters:
             h.do_after()
             
 
     def feed_init(self, **kwargs):
         """
-        Initializes ctags_file data members and possible data harvests.
+        Initializes ctags_file data members and possible data harvesters.
             - B{Keyword Arguments:}
-                - B{harvests:} (list) list of harvesting classes
+                - B{harvesters:} (list) list of harvester classes
         @raises ValueError: parsing error
         """
 
-        valid_kwargs = ['harvests']
+        valid_kwargs = ['harvesters']
         validator.validate(kwargs.keys(), valid_kwargs)
         
         self._clear_variables()
 
-        self.__feed_harvests = list()
-        if 'harvests' in kwargs:
-            self.__feed_harvests = kwargs['harvests']
+        self.__feed_harvesters = list()
+        if 'harvesters' in kwargs:
+            self.__feed_harvesters = kwargs['harvesters']
             
-        for h in self.__feed_harvests:
+        for h in self.__feed_harvesters:
             h.set_tagfile(self)
             h.do_before()
 
@@ -237,12 +237,12 @@ class ctags_file:
 
         entry = ctags_entry(tagline)
         self.tags.append(entry)
-        for h in self.__feed_harvests:
+        for h in self.__feed_harvesters:
             h.feed(entry)
 
     def feed_finish(self):
-        """ Finalizes data harvests from tag line feed.  Drops references to harvests."""
-        for h in self.__feed_harvests:
+        """ Finalizes data harvesters from tag line feed.  Drops references to harvesters."""
+        for h in self.__feed_harvesters:
             h.do_after()
-        # drop the references to the harvests
-        self.__feed_harvests = list()
+        # drop the references to the harvesters
+        self.__feed_harvesters = list()

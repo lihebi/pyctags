@@ -283,12 +283,12 @@ class exuberant_ctags(ctags_base):
                 - B{tag_program:} (str) path to ctags executable, or name of a ctags program in path
                 - B{files:} (sequence) files to process with ctags
                 - B{generator_options:} (dict) options to pass to ctags program
-                - B{harvests:} (list) list of harvest data classes for ctags_file to use while parsing
+                - B{harvesters:} (list) list of harvester data classes for ctags_file to use while parsing
             - B{Returns:}
                 - (ctags_file or None) generated instance of ctags_file on success, None on failure
         @raise ValueError: ctags executable path not set
         """
-        valid_kwargs = ['tag_program', 'files', 'generator_options', 'harvests']
+        valid_kwargs = ['tag_program', 'files', 'generator_options', 'harvesters']
         validator.validate(kwargs.keys(), valid_kwargs)
         
         (gen_opts, file_list) = self._prepare_to_generate(kwargs)
@@ -296,11 +296,11 @@ class exuberant_ctags(ctags_base):
         
         tagfile = ctags_file()
 
-        harvests = list()
-        if 'harvests' in kwargs:
-            harvests = kwargs['harvests']
+        harvesters = list()
+        if 'harvesters' in kwargs:
+            harvesters = kwargs['harvesters']
             
-        tagfile.feed_init(harvests=harvests)
+        tagfile.feed_init(harvesters=harvesters)
 
         self.command_line = self._executable_path + ' ' + tag_args
         p = subprocess.Popen(self.command_line, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)

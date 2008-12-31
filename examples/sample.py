@@ -36,14 +36,14 @@ list_o_tags = generator.generate_tags(generator_options={'--fields' : '+n'})
 
 names = name_lookup_harvester()
 by_name = by_name_harvester()
-tagfile = ctags_file(list_o_tags, harvests=[names, by_name])
+tagfile = ctags_file(list_o_tags, harvesters=[names, by_name])
 
 print ("Found %d tags in %d source files." % (len(tagfile.tags), len(source_files)))
 
 # this fetches unique names
 letter_tags = names.starts_with('c')
 print ("%d individual names start with the letter c." % (len(letter_tags)))
-by_name_tags = by_name.retrieve_data()
+by_name_tags = by_name.get_data()
 
 for t in letter_tags:
     # there can be more than one occurance of a particular name
