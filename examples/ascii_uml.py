@@ -92,7 +92,7 @@ class python_class_harvester(pyctags.harvesters.base_harvester):
                 self.class_data[classname].members.append((entry.name, entry.file, entry.line_number))
 
     def do_after(self):
-        # build the class heirarchy
+        # build the class hierarchy
         derived_classes = list()
         for cl_def in self.class_data.values():
             if not cl_def.inherits_from:
