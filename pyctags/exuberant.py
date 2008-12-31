@@ -123,7 +123,7 @@ class exuberant_ctags(ctags_base):
         
         if '--langmap' not in gen_opts and len(self.__extra_file_extensions):
             lang_opts = ""
-            for lang, exts in self.__extra_file_extensions.iteritems():
+            for lang, exts in self.__extra_file_extensions.items():
                 lang_opts += lang.lower() + ":+"
                 for ext in exts:
                     lang_opts += ext
