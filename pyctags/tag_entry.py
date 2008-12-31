@@ -70,8 +70,6 @@ class ctags_entry:
         """ If not None, line number to locate this tag in self.file."""
         self.extensions = None
         """ If not none, dict of extension fields embedded in comments in the tag entry, from exuberant ctags."""
-        self.short_filename = None
-        """ Short version of filename, used in str representation."""
         self.__rep = None
         
         entry = dict()
