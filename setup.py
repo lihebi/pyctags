@@ -4,7 +4,7 @@ from distutils.core import setup
 import glob
 
 setup(name='pyctags',
-      version='0.4.x',
+      version='0.5.0',
       description='Python ctags interface.',
       author='Ben Smith',
       author_email='benjamin.coder.smith@gmail.com',
