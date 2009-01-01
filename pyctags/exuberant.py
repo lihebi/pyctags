@@ -28,11 +28,11 @@ from copy import copy
 try:
     # do relative imports for tests
     # try this first in case pyctags is already installed, since we want to be testing the source bundled in the distribution
-    from tag_base import ctags_base, VersionException
+    from tag_base import ctags_base
     from kwargs_validator import the_validator as validator
     from tag_file import ctags_file
 except ImportError:
-    from pyctags.tag_base import ctags_base, VersionException
+    from pyctags.tag_base import ctags_base
     from pyctags.kwargs_validator import the_validator as validator
     from pyctags import ctags_file
 
