@@ -60,10 +60,11 @@
 </table>
 <!-- ==================== PACKAGE DESCRIPTION ==================== -->
 <h1 class="epydoc">Package pyctags</h1><p class="nomargin-top"><span class="codelink"><a href="pyctags-pysrc.html">source&nbsp;code</a></span></p>
-<p>A ctags file reader and a wrapper to the command line program 
-  ctags.</p>
+<p>A ctags file reader and a wrapper to the command line program ctags.  
+  With the extensions that exuberant ctags provides, this could be useful 
+  for static code analysis.</p>
   <p>This package has been tested against exuberant ctags version 5.7 and 
-  SVN revision 686 on Windows XP and Linux with Python 2.5 and 2.6.</p>
+  SVN revision 686 on Windows XP and Linux with Python 2.5 and 3.0.</p>
   <p><b>Security Notes:</b></p>
   <ul>
     <li>
@@ -76,72 +77,38 @@
       their applications.
     </li>
   </ul>
-  <p>Included in the source distribution is an example of usage and several
-  tests that can illustrate usage.</p>
+  <p>Included in the source distribution are a few examples of usage, the 
+  test cases provide a more comprehensive usage reference.</p>
   <p>Here's a very small sample to show it in action:</p>
 <pre class="literalblock">
    from pyctags import exuberant_ctags, ctags_file
+   from pyctags.harvesters import kind_harvester
 
    # if you have a list of source files:
-   ctags = exuberant_ctags()
+   ctags = exuberant_ctags(files=['path/to/source.h', 'path/to/source.c', 'path/to/source.py'])
 
-   # the module will default to running whichever ctags is on the path, if it can
-   taglist = ctags.generate_tags(files=['path/to/source.h'])
+   # you can generate a ctags_file instance right away
+   # ctags_file is what parses lines from the generator or a 
+   # tags file and creates a list of ctags_entry instances
+   tag_file = ctags.generate_object()
+
+   # override the default run parameters for exuberant ctags, so we get full kind names, say
+   tag_file = ctags.generate_object(generator_options={'--fields' : '+iKmn', '-F' : None})
+
+   print len(tagfile.tags) # number of tags
    
-   # or you can specify a path
-   taglist = ctags.generate(tag_program='/opt/bin/ctags', files=['/path/to/source.h', '/path/to/different/source.py', '../also/here.c'])
-   
-   # pass additional flags to exuberant ctags (file list stored from previous run or constructor)
-   taglist = ctags.generate_tags(generator_options={'--fields' : '+imn', '-F' : None}
-
-   # you can generate a tag file instead
-   ctags.generate_tagfile(output_file_path, generator_options={'--fields' : '+imn'}, file_list=['../some_dir/src.s'])
-   
-   # a few ways to parse into a ctags_file object
-   tagfile = ctags_file(taglist)
-   
-   # or, if you already have a tags file:
-   tagfile = ctags_file(&quot;/path/to/tagfile&quot;)
-   
-   # or from a list
-   file_lines = open(&quot;/path/to/tagfile&quot;).readlines()
-   tagfile = ctags_file(file_lines)
-
-   # you can also do it this way
-   tagfile = ctags_file()
-   tagfile.parse(file_lines)
-   
-   # clears data from file_lines
-   tagfile.parse(&quot;/path/to/tagfile&quot;)
-   
-   print len(tagfile) # number of tags
-
-   f_tags = tagfile.starts_with('f', case_sensitive=True) # print all tags that start with a lower case f
-
-   first_tag = tagfile[0]
-
-   for tag in tagfile:
-       print tag
-
-   taglist = tagfile['tagname'] # list of tags that match tagname
-
-   for tag in taglist:
-       print tag.name
-       print tag.line_number
-       print tag.pattern
-       print tag.extensions
+   harvester = kind_harvester()
+   harvester.process_tag_list(tagfile.tags)
+   kinds = harvester.get_data()
+   print(kinds['class']) # print list of classes
 </pre>
   <p>I'm not certain if ctags generators other than Exuberant Ctags are in 
-  much use, but wrappers for them can be derived from ctags_base.py. Feel 
-  free to contact me for or with details.</p>
-  <p>Pyctags is currently unsuitable for extremely large projects.  I've 
-  used it to generate a custom kernel source tag file that came out to 153 
-  MB, generation worked fine but I had to kill the tag parser - it was 
-  soaking up an enormous amount of RAM.  The kernel source is a very large 
-  data set to represent all of in memory at once in python, though I'm 
-  hoping there are things I can do to address this.  Things will work fine 
-  on smaller projects than the Linux kernel, depending on the amount of 
-  system memory available.</p>
+  much use, but wrappers for them can be derived from ctags_base. Feel free
+  to contact me for or with details.</p>
+  <p>Pyctags is pretty heavy for large projects.  A 153 MB tag file 
+  generated from linux kernel sources takes a while to process and consumes
+  over 1.1GB of RAM.  I hope to discover more ways to trim this down 
+  without going for a C implementation.</p>
 
 <!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -162,12 +129,13 @@
 </tr>
   <tr><td class="summary">
   <ul class="nomargin">
-    <li> <strong class="uidlink"><a href="pyctags.ctags_base-module.html">pyctags.ctags_base</a></strong>: <em class="summary">Base class for wrappers around ctags programs.</em>    </li>
     <li> <strong class="uidlink"><a href="pyctags.exuberant-module.html">pyctags.exuberant</a></strong>: <em class="summary">Exuberant Ctags (<a href="http://ctags.sourceforge.net" 
         target="_top">http://ctags.sourceforge.net</a>) wrapper.</em>    </li>
+    <li> <strong class="uidlink"><a href="pyctags.harvesters-module.html">pyctags.harvesters</a></strong>: <em class="summary">Classes that process tag data to collect information.</em>    </li>
     <li> <strong class="uidlink"><a href="pyctags.kwargs_validator-module.html">pyctags.kwargs_validator</a></strong>: <em class="summary">A simple validator to make sure keyword arguments are valid.</em>    </li>
-    <li> <strong class="uidlink"><a href="pyctags.readtags-module.html">pyctags.readtags</a></strong>: <em class="summary">Python representation of ctags format file and data elements in the
-        file.</em>    </li>
+    <li> <strong class="uidlink"><a href="pyctags.tag_base-module.html">pyctags.tag_base</a></strong>: <em class="summary">Base class for wrappers around ctags programs.</em>    </li>
+    <li> <strong class="uidlink"><a href="pyctags.tag_entry-module.html">pyctags.tag_entry</a></strong>: <em class="summary">Python representation of ctags data elements.</em>    </li>
+    <li> <strong class="uidlink"><a href="pyctags.tag_file-module.html">pyctags.tag_file</a></strong>: <em class="summary">Python representation of ctags format file.</em>    </li>
   </ul></td></tr>
 </table>
 
@@ -203,7 +171,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Dec 13 17:38:36 2008
+    Generated by Epydoc 3.0.1 on Thu Jan 01 04:48:47 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

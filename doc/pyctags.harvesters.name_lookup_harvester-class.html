@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pyctags.readtags.ctags_entry</title>
+  <title>pyctags.harvesters.name_lookup_harvester</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pyctags-module.html">Package&nbsp;pyctags</a> ::
-        <a href="pyctags.readtags-module.html">Module&nbsp;readtags</a> ::
-        Class&nbsp;ctags_entry
+        <a href="pyctags.harvesters-module.html">Module&nbsp;harvesters</a> ::
+        Class&nbsp;name_lookup_harvester
       </span>
     </td>
     <td>
@@ -54,15 +54,22 @@
     onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pyctags.readtags.ctags_entry-class.html"
+            >]&nbsp;|&nbsp;<a href="pyctags.harvesters.name_lookup_harvester-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class ctags_entry</h1><p class="nomargin-top"><span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry">source&nbsp;code</a></span></p>
-<p>An entry in the tag file.</p>
+<h1 class="epydoc">Class name_lookup_harvester</h1><p class="nomargin-top"><span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+<a href="pyctags.harvesters.base_harvester-class.html">base_harvester</a> --+
+                 |
+                <strong class="uidshort">name_lookup_harvester</strong>
+</pre>
+
+<hr />
+<p>Builds a sorted list of unique tag names.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -87,12 +94,81 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pyctags.readtags.ctags_entry-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">*args</span>,
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Number of unique tag names found.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.__len__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyctags.harvesters.name_lookup_harvester-class.html#feed" class="summary-sig-name">feed</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">entry</span>)</span><br />
+      Records unique names.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.feed">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyctags.harvesters.name_lookup_harvester-class.html#do_after" class="summary-sig-name">do_after</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Process the unique names into a form easier to query.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.do_after">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pyctags.harvesters.name_lookup_harvester-class.html#starts_with" class="summary-sig-name">starts_with</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">matchstr</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      A tag entry from ctags file.</td>
+      Fetches an alphabetical list of unique tag names that begin with 
+      matchstr.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry.__init__">source&nbsp;code</a></span>
+            <span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.starts_with">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -100,162 +176,13 @@
       
     </td>
   </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__repr__"></a><span class="summary-sig-name">__repr__</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry.__repr__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__str__"></a><span class="summary-sig-name">__str__</span>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry.__str__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__eq__"></a><span class="summary-sig-name">__eq__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">other</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry.__eq__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="__ne__"></a><span class="summary-sig-name">__ne__</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">other</span>)</span></td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry.__ne__">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-</table>
-<!-- ==================== CLASS VARIABLES ==================== -->
-<a name="section-ClassVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Class Variables</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-ClassVariables"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="__COMMENT_BEGIN"></a><span class="summary-name">__COMMENT_BEGIN</span> = <code title="';&quot;'"><code class="variable-quote">'</code><code class="variable-string">;&quot;</code><code class="variable-quote">'</code></code>
-    </td>
-  </tr>
-</table>
-<!-- ==================== INSTANCE VARIABLES ==================== -->
-<a name="section-InstanceVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Variables</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceVariables"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="name"></a><span class="summary-name">name</span><br />
-      Tag name.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="file"></a><span class="summary-name">file</span><br />
-      Source file of tag.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="pattern"></a><span class="summary-name">pattern</span><br />
-      If not None, regular expression to locate this tag in self.file.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="line_number"></a><span class="summary-name">line_number</span><br />
-      If not None, line number to locate this tag in self.file.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="extensions"></a><span class="summary-name">extensions</span><br />
-      If not none, dict of extension fields embedded in comments in the tag
-      entry, from exuberant ctags.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="short_filename"></a><span class="summary-name">short_filename</span><br />
-      Short version of filename, used in str representation.
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pyctags.harvesters.base_harvester-class.html">base_harvester</a></code></b>:
+      <code><a href="pyctags.harvesters.base_harvester-class.html#do_before">do_before</a></code>,
+      <code><a href="pyctags.harvesters.base_harvester-class.html#get_data">get_data</a></code>,
+      <code><a href="pyctags.harvesters.base_harvester-class.html#process_tag_list">process_tag_list</a></code>
+      </p>
     </td>
   </tr>
 </table>
@@ -277,56 +204,99 @@
   </td>
 </tr>
 </table>
-<a name="__init__"></a>
+<a name="feed"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**kwargs</span>)</span>
-    <br /><em class="fname">(Constructor)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">feed</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">entry</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="pyctags.readtags-pysrc.html#ctags_entry.__init__">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.feed">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>A tag entry from ctags file. Initializes from keyword args.</p>
+  <p>Records unique names.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>entry</code></strong> (ctags_entry) - the entry to collect the name from.</li>
+    </ul></dd>
+    <dt>Overrides:
+        <a href="pyctags.harvesters.base_harvester-class.html#feed">base_harvester.feed</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="do_after"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">do_after</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.do_after">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Process the unique names into a form easier to query.</p>
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="pyctags.harvesters.base_harvester-class.html#do_after">base_harvester.do_after</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="starts_with"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">starts_with</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">matchstr</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="pyctags.harvesters-pysrc.html#name_lookup_harvester.starts_with">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Fetches an alphabetical list of unique tag names that begin with 
+  matchstr.</p>
   <ul>
     <li>
-      <b>Keyword Arguments:</b>
+      <b>Parameters:</b>
       <ul>
         <li>
-          <b>name</b>: (str) tag name
-        </li>
-        <li>
-          <b>file</b>: (str) source file name
-        </li>
-        <li>
-          <b>pattern</b>: (str) locator pattern for tag
-        </li>
-        <li>
-          <b>line_number</b>: (int) locator line number
-        </li>
-        <li>
-          <b>extensions</b>: (dict) extension fields
+          <b>matchstr:</b> (str) string to search for in tags db
         </li>
       </ul>
     </li>
     <li>
-      <b>Raises:</b>
+      <b>Keyword Arguments:</b>
       <ul>
         <li>
-          <b>ValueError</b>: line_number or pattern isn't set, or a 
-          parameter type can't be transformed.
+          <b>num_results:</b> (int) maximum number of results to return, 0 
+          for all, default
+        </li>
+        <li>
+          <b>case_sensitive:</b> (bool) whether to match case, default 
+          False
         </li>
       </ul>
     </li>
   </ul>
   <dl class="fields">
+    <dt>Returns: list</dt>
+        <dd>matching tag names</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -362,7 +332,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Dec 13 17:38:37 2008
+    Generated by Epydoc 3.0.1 on Thu Jan 01 04:48:47 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
