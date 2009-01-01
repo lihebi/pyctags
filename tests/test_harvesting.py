@@ -22,6 +22,7 @@ sys.path.append("../pyctags")
 from tag_file import ctags_file
 from harvesters import kind_harvester, name_lookup_harvester, by_name_harvester
 from tag_lists import tag_lists
+from exuberant import exuberant_ctags 
 
 class TestHarvesting(TestCase):
     def do_kind_harvest(self, taglist):
@@ -37,6 +38,7 @@ class TestHarvesting(TestCase):
 
     def test_kind_harvester(self):
 
+        ec = exuberant_ctags()
         (tf, kinds) = self.do_kind_harvest(tag_lists['unextended']['body'])
         self.failUnlessEqual(len(kinds), 0)
         
@@ -44,16 +46,24 @@ class TestHarvesting(TestCase):
         self.failUnlessEqual(len(kinds), 0)
 
         (tf, kinds) = self.do_kind_harvest(tag_lists['relpath']['body'])
-        self.failUnlessEqual(len(kinds), 3)
-        self.check_kind_keys(kinds, ['c', 'm', 'v'])
+        if ec.version == "5.7":
+            self.failUnlessEqual(len(kinds), 2)
+            self.check_kind_keys(kinds, ['c', 'm'])
+        elif ec.version == "5.6b1":
+            self.failUnlessEqual(len(kinds), 3)
+            self.check_kind_keys(kinds, ['c', 'm', 'v'])
         
         for tag in tf.tags:
             if 'kind' in tag.extensions:
                 self.failUnless(tag in kinds[tag.extensions['kind']])
 
         (tf, kinds) = self.do_kind_harvest(tag_lists['hyper_extended']['body'])
-        self.failUnlessEqual(len(kinds), 3)
-        self.check_kind_keys(kinds, ['class', 'member', 'variable'])
+        if ec.version == "5.7":
+            self.failUnlessEqual(len(kinds), 2)
+            self.check_kind_keys(kinds, ['class', 'member'])
+        elif ec.version == "5.6b1":
+            self.failUnlessEqual(len(kinds), 3)
+            self.check_kind_keys(kinds, ['class', 'member', 'variable'])
         
         for tag in tf.tags:
             if 'kind' in tag.extensions:
