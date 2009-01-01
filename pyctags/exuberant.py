@@ -285,8 +285,9 @@ class exuberant_ctags(ctags_base):
         """
         Parses source files into a ctags_file instance.
         This method exists to avoid storing ctags generated data in an intermediate form before parsing.
+        
         According to python documentation, this mechanism could deadlock due to other OS pipe buffers filling and blocking the child process.
-        http://docs.python.org/library/subprocess.html
+        U{http://docs.python.org/library/subprocess.html}
             - B{Keyword Arguments:}
                 - B{tag_program:} (str) path to ctags executable, or name of a ctags program in path
                 - B{files:} (sequence) files to process with ctags

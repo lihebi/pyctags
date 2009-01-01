@@ -16,7 +16,7 @@
 ##    and the GNU Lesser General Public Licens along with pyctags.  If not, 
 ##    see <http://www.gnu.org/licenses/>.
 
-""" Classes that process tag data."""
+""" Classes that process tag data to collect information."""
 from copy import copy
 
 try:
@@ -90,7 +90,6 @@ class base_harvester:
 class kind_harvester(base_harvester):
     """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
     def __init__(self, *args, **kwargs):
-        """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
         self.kinds = {}
     
     def __len__(self):
@@ -123,7 +122,6 @@ class kind_harvester(base_harvester):
 class by_name_harvester(base_harvester):
     """ Organizes tags by name."""
     def __init__(self, *args, **kwargs):
-        """ Organizes tags by name."""
         self.names = dict()
     
     def __len__(self):
@@ -146,7 +144,6 @@ class by_name_harvester(base_harvester):
 class name_lookup_harvester(base_harvester):
     """ Builds a sorted list of unique tag names."""
     def __init__(self, *args, **kwargs):
-        """ Builds a sorted list of unique tag names."""
         self.__unique_names = dict()
         self.__sorted_names = list()
         self.__name_index = dict()
