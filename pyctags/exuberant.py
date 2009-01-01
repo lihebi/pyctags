@@ -21,7 +21,7 @@ Exuberant Ctags (U{http://ctags.sourceforge.net}) wrapper.
 
 This module uses the subprocess.Popen function.  Users of this module could pass arbitrary commands to the system.
 """
-import subprocess, os
+import subprocess, os, sys
 from copy import copy
 
 
@@ -207,20 +207,22 @@ class exuberant_ctags(ctags_base):
         if p.returncode != 0:
             raise ValueError("Ctags execution did not complete, return value: " + p.returncode + ".\nCommand line: " + self.command_line)
         
-        results = out.decode().splitlines()
-        
-        # check for warning strings in output
-        idxs = []
-        i = 0
-        for r in results:
-            if r[:len(self.__warning_str)] == self.__warning_str:
-                idxs.append(i)
-            i += 1
-
-        # reverse the list so we don't mess up index numbers as we're removing them
-        idxs.sort(reverse=True)
-        for i in idxs:
-            self.warnings.append(results.pop(i))
+        results = out.decode("utf-8").splitlines()
+        if sys.platform == 'win32':
+            # check for warning strings in output
+            idxs = []
+            i = 0
+            for r in results:
+                if r[:len(self.__warning_str)] == self.__warning_str:
+                    idxs.append(i)
+                i += 1
+    
+            # reverse the list so we don't mess up index numbers as we're removing them
+            idxs.sort(reverse=True)
+            for i in idxs:
+                self.warnings.append(results.pop(i))
+        else:
+            self.warnings = err.decode("utf-8").splitlines()
 
         return results
 
@@ -269,6 +271,11 @@ class exuberant_ctags(ctags_base):
         self.command_line = self._executable_path + ' ' + tag_args
         p = subprocess.Popen(self.command_line, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         (out, err) = p.communicate(input=file_list.encode())
+        if sys.platform == 'win32':
+            self.warnings = out.decode("utf-8").splitlines()
+        else:
+            self.warnings = err.decode("utf-8").splitlines()
+        
         if (p.returncode == 0):
             return True
         return False
@@ -313,7 +320,7 @@ class exuberant_ctags(ctags_base):
             line = p.stdout.readline().decode("utf-8")
             if not len(line):
                 continue
-            if line[:len(self.__warning_str)] == self.__warning_str:
+            if sys.platform == 'win32' and line[:len(self.__warning_str)] == self.__warning_str:
                 self.warnings.append(line)
             else:
                 tagfile.feed_line(line)
@@ -322,11 +329,14 @@ class exuberant_ctags(ctags_base):
         for line in p.stdout.read().decode("utf-8").splitlines():
             if not len(line):
                 continue
-            if line[:len(self.__warning_str)] == self.__warning_str:
+            if sys.platform == 'win32' and line[:len(self.__warning_str)] == self.__warning_str:
                 self.warnings.append(line)
             else:
                 tagfile.feed_line(line)
-            
+    
+        if sys.platform != 'win32':
+            self.warnings = p.stderr.read().decode("utf-8").splitlines()
+    
         tagfile.feed_finish()
         
         if p.returncode == 0:
