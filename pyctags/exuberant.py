@@ -100,7 +100,7 @@ class exuberant_ctags(ctags_base):
 
         p = subprocess.Popen(shell_str, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         (out, err) = p.communicate()
-        outstr = out.decode()
+        outstr = out.decode("utf-8")
         if outstr.lower().find(self.__exuberant_id) < 0:
             raise TypeError("Executable file " + self._executable_path + " is not Exuberant Ctags")
         
@@ -114,7 +114,7 @@ class exuberant_ctags(ctags_base):
         p = subprocess.Popen(path + ' ' + self.__list_kinds_opt, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         (out, err) = p.communicate()
         
-        self.language_info = self.__process_kinds_list(out.decode().splitlines())
+        self.language_info = self.__process_kinds_list(out.decode("utf-8").splitlines())
         
     def _dict_to_args(self, gen_opts):
         """
