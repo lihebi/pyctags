@@ -1,7 +1,8 @@
-* Python 3000 updates
-* implement container method on ctags_file so the in operator works correctly
-* changed internal sort to use repr() instead of str()
-
+* Bugfixes and api improvements that simplify usage
+* New examples added
+* Added a method to ctags_base and exuberant_ctags classes that generate ctags_file object instances directly
+* Separated tag data collection from parsing, making the parsing interface lighter
+* Python 3000 compatibility
 
 0.4.0 December 13, 2008
 * Initial release.
