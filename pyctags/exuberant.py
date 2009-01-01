@@ -51,7 +51,7 @@ class exuberant_ctags(ctags_base):
     __default_opts = {"-L" : "-", "-f" : "-"}
     __exuberant_id = "exuberant ctags"
     __supported_versions = ["5.7", "5.6b1"]
-    __warning_str = "ctags: Warning:"
+    __warning_str = ": Warning:"
     
     def __init__(self, *args, **kwargs):
         """
@@ -210,12 +210,20 @@ class exuberant_ctags(ctags_base):
             raise ValueError("Ctags execution did not complete, return value: " + p.returncode + ".\nCommand line: " + self.command_line)
         
         results = out.decode("utf-8").splitlines()
+            
         if sys.platform == 'win32':
             # check for warning strings in output
+            if self._executable_path.rfind("/") >= 0:
+                shortname = self._executable_path[self._executable_path.rfind("/"):]
+            elif self._executable_path.rfind("\\") >= 0:
+                shortname = self._executable_path[self._executable_path.rfind("\\"):]
+            else:
+                shortname = self._executable_path
+
             idxs = []
             i = 0
             for r in results:
-                if r[:len(self.__warning_str)] == self.__warning_str:
+                if r.find(shortname + self.__warning_str) == 0:
                     idxs.append(i)
                 i += 1
     
@@ -317,12 +325,21 @@ class exuberant_ctags(ctags_base):
         
         # is this the cleanest way to do this?  it makes the program execute, but I haven't found another way
         p.stdin.close()
+        
+        if sys.platform == "win32":
+            if self._executable_path.rfind("/") >= 0:
+                shortname = self._executable_path[self._executable_path.rfind("/"):]
+            elif self._executable_path.rfind("\\") >= 0:
+                shortname = self._executable_path[self._executable_path.rfind("\\"):]
+            else:
+                shortname = self._executable_path
+
 
         while p.poll() is None:
             line = p.stdout.readline().decode("utf-8")
             if not len(line):
                 continue
-            if sys.platform == 'win32' and line[:len(self.__warning_str)] == self.__warning_str:
+            if sys.platform == 'win32' and line.find(shortname + self.__warning_str) == 0:
                 self.warnings.append(line)
             else:
                 tagfile.feed_line(line)
@@ -331,7 +348,7 @@ class exuberant_ctags(ctags_base):
         for line in p.stdout.read().decode("utf-8").splitlines():
             if not len(line):
                 continue
-            if sys.platform == 'win32' and line[:len(self.__warning_str)] == self.__warning_str:
+            if sys.platform == 'win32' and line.find(shortname + self.__warning_str) == 0:
                 self.warnings.append(line)
             else:
                 tagfile.feed_line(line)
