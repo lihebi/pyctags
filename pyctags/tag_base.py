@@ -31,17 +31,6 @@ try:
 except ImportError:
     from pyctags.kwargs_validator import the_validator as validator
 
-class VersionException(Exception):
-    """
-    Raised when version number isn't in known working list.  Not necessarialy fatal.
-    """
-    
-    def __init__(self, v):
-        self.v = v
-    
-    def __str__(self):
-        return str(self.v)
-
 class ctags_base:
     """
     This class exists to provide a template and some functionality for wrapping command line ctags programs.
@@ -87,19 +76,14 @@ class ctags_base:
         """
         rval = False
         if type(path) == str:
-            # see exe_file is executable
+            # see if exe_file is executable
             try:
                 subprocess.Popen(path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
                 rval = True
             except OSError:
                 pass
-            if rval:
-                try:
-                    self._query_tag_generator(path)
-                except VersionException:
-                    pass
-                except:
-                    rval = False
+        if rval:
+            self._query_tag_generator(path)
             
         return rval
     

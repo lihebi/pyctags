@@ -106,8 +106,6 @@ class exuberant_ctags(ctags_base):
         
         comma = outstr.find(',')
         self.version = outstr[len(self.__exuberant_id):comma].strip()
-        if self.version not in self.__supported_versions:
-            raise VersionException("Version " + self.version + " isn't known to work, but might.")
 
         # find out what this version of ctags supports in terms of language and kinds of tags
         p = subprocess.Popen(path + ' ' + self.__list_kinds_opt, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
