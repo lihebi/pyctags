@@ -43,7 +43,6 @@ class exuberant_ctags(ctags_base):
     The B{generate_tags} and B{generate_tagfile} methods will accept custom command line parameters for exuberant ctags via the generator_options keyword dict.
     The Exuberant Ctags output flags (-f and -o) are reserved for internal use and will trigger an exception.
     """
-    __extra_file_extensions = {}
     __version_opt = "--version"
     __list_kinds_opt = "--list-kinds"
     __argless_args = ["--version", "--help", "--license", "--list-languages", 
@@ -123,14 +122,6 @@ class exuberant_ctags(ctags_base):
         @rtype: str
         """
         
-        if '--langmap' not in gen_opts and len(self.__extra_file_extensions):
-            lang_opts = ""
-            for lang, exts in self.__extra_file_extensions.items():
-                lang_opts += lang.lower() + ":+"
-                for ext in exts:
-                    lang_opts += ext
-            gen_opts['--langmap'] = lang_opts
-            
         # because yargs sounds like a pirate
         yargs = ""
         for k, v in gen_opts.items():
