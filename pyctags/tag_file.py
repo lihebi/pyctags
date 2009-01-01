@@ -153,7 +153,6 @@ class ctags_file:
             harvesters = kwargs['harvesters']
             
         for harvester in harvesters:
-            harvester.set_tagfile(self)
             harvester.do_before()
             
         line_number = 1
@@ -195,7 +194,6 @@ class ctags_file:
             raise ValueError("No tag data to harvest from.")
         
         for h in harvesters:
-            h.set_tagfile(self)
             h.do_before()
         
         for tag in self.tags:
@@ -225,7 +223,6 @@ class ctags_file:
             self.__feed_harvesters = kwargs['harvesters']
             
         for h in self.__feed_harvesters:
-            h.set_tagfile(self)
             h.do_before()
 
     def feed_line(self, tagline):

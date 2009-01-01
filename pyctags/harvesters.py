@@ -28,17 +28,6 @@ except ImportError:
 
 class base_harvester:
     """ This class definition outlines the basic interface for harvesting classes."""
-    def __init__(self, *args, **kwargs):
-        self._tag_file = None
-        """ 
-        Reference to the ctags_file instance that contains the ctags_entry instances that were harvested.
-        Set by ctags_file.parse().
-        """
-    
-    def __len__(self, *args, **kwargs):
-        #unnecessary?
-        pass
-    
     def do_before(self):
         """ Called before any entries are processed with self.feed()."""
         pass
@@ -57,31 +46,13 @@ class base_harvester:
     def get_data(self):
         """ Used to retrieve derived-class specific harvested data."""
         pass
-
-    def set_tagfile(self, tag_file):
-        """ Called by ctags_file when processing ctags_entry data."""
-        self._tag_file = tag_file
     
-    def get_tagfile(self):
-        """
-        Returns reference to the ctags_file instance this data harvest processed.
-        @returns: ctags_file
-        """
-        return self._tag_file
-    
-    def forget_tagfile(self):
-        """
-        Removes reference to ctags_file so it can be garbage collected if memory is an issue.
-        """
-        self._tag_file = None
-
     def process_tag_list(self, taglist):
         """
         Allows processing of a list of ctags_entry instances without an associated ctags_file.
         @param taglist: list of ctags_entry instances
         @type taglist: list
         """
-        self.set_tagfile(None)
         self.do_before()
         for tag in taglist:
             self.feed(tag)
@@ -89,14 +60,8 @@ class base_harvester:
 
 class kind_harvester(base_harvester):
     """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.kinds = {}
-    
-    def __len__(self):
-        """
-        Number of unique kinds found in ctags_file.
-        """
-        return len(self.kinds)
     
     def feed(self, entry):
         """ 
@@ -121,12 +86,9 @@ class kind_harvester(base_harvester):
 
 class by_name_harvester(base_harvester):
     """ Organizes tags by name."""
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.names = dict()
     
-    def __len__(self):
-        return len(self.names)
-
     def feed(self, entry):
         """
         Builds a ctags_entry.name keyed dict.
@@ -143,7 +105,7 @@ class by_name_harvester(base_harvester):
 
 class name_lookup_harvester(base_harvester):
     """ Builds a sorted list of unique tag names."""
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         self.__unique_names = dict()
         self.__sorted_names = list()
         self.__name_index = dict()
