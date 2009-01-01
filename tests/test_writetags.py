@@ -36,9 +36,16 @@ class test_exuberant_ctags(unittest.TestCase):
     
     def test_executable_set(self):
         ec = exuberant_ctags(tag_program=tag_program)
-
-        ec = exuberant_ctags()
-        ec.ctags_executable('/bin/ctags')
+        ec.generate_tagfile("generated.tags", tag_program=tag_program, files=file_lists['relpath'])
+        self.failIf(not os.path.exists("generated.tags"))
+        os.remove("generated.tags")
+        
+        if sys.platform == "win32" and extended_tests:
+            ec = exuberant_ctags()
+            ec.ctags_executable('/bin/ctags')
+            ec.generate_tagfile("generated.tags", tag_program=tag_program, files=file_lists['relpath'])
+            self.failIf(not os.path.exists("generated.tags"))
+            os.remove("generated.tags")
         
         ec = exuberant_ctags()
         ec.generate_tagfile("generated.tags", tag_program=tag_program, files=file_lists['relpath'])
