@@ -140,29 +140,15 @@ class ctags_file:
         @raises ValueError: parsing error
         """
 
-        valid_kwargs = ['harvesters']
-        validator.validate(kwargs.keys(), valid_kwargs)
-
         if type(tags) == str:
             # we can iterate over the file, it doesn't have to be in a list first
             tags = open(tags)
 
-        self._clear_variables()
-        
-        harvesters = list()
-        if 'harvesters' in kwargs:
-            harvesters = kwargs['harvesters']
-            
-        for harvester in harvesters:
-            harvester.do_before()
-            
-        line_number = 1
+        self.feed_init(**kwargs)
 
         for line in tags:
-            
             if not _PYTHON_3000_ and type(line) is not unicode:
-                line = unicode(line, "utf-8")
-            
+                line = line.decode("utf-8")
             if line[0] == '!':
                 # this is part of the file information header
                 line = line.strip()
@@ -172,16 +158,9 @@ class ctags_file:
                 except KeyError:
                     print ("Unknown header comment element " + elements[0] + " at line " + line_number + ".")
             else:
-                entry = ctags_entry(line)
+                self.feed_line(line)
 
-                self.tags.append(entry)
-                for harvester in harvesters:
-                    harvester.feed(entry)
-
-            line_number += 1
-
-        for harvester in harvesters:
-            harvester.do_after()
+        self.feed_finish()
 
     def harvest(self, harvesters):
         """
