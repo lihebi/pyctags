@@ -26,7 +26,7 @@ import pyctags, os, time, sys
 
 srcdir = "../../temp extracts/linux-2.6.27"
 if sys.platform.lower()[:len('linux')] == 'linux':
-    srcdir = os.realpath("/usr/src/linux")
+    srcdir = os.path.realpath("/usr/src/linux")
 
 source_files = list()
 extensions = ['.c', '.h', '.s']
