@@ -63,8 +63,10 @@ class exuberant_ctags(ctags_base):
         valid_kwargs = ['tag_program', 'files']
         validator.validate(kwargs.keys(), valid_kwargs)
 
-        self.__version = None
+        self.version = None
+        """ Exuberant ctags version number."""
         self.language_info = None
+        """ Exuberant ctags supported language parsing features."""
 
         ctags_base.__init__(self, *args, **kwargs)
 
@@ -103,9 +105,9 @@ class exuberant_ctags(ctags_base):
             raise TypeError("Executable file " + self._executable_path + " is not Exuberant Ctags")
         
         comma = outstr.find(',')
-        self.__version = outstr[len(self.__exuberant_id):comma].strip()
-        if self.__version not in self.__supported_versions:
-            raise VersionException("Version " + self.__version + " isn't known to work, but might.")
+        self.version = outstr[len(self.__exuberant_id):comma].strip()
+        if self.version not in self.__supported_versions:
+            raise VersionException("Version " + self.version + " isn't known to work, but might.")
 
         # find out what this version of ctags supports in terms of language and kinds of tags
         p = subprocess.Popen(path + ' ' + self.__list_kinds_opt, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
