@@ -38,10 +38,11 @@ class ctags_file:
     
     def __init__(self, tags=None, **kwargs):
         """
-        @param tags: If I{tags} is a sequence, it will automatically be parsed.  If it is a filename or path, it will be opened and parsed.
-        @type tags: sequence or str
+        Initializes instances of ctags_file.
             - B{Keyword Arguments:}
                 - B{harvesters:} (list) list of harvester classes
+        @param tags: If I{tags} is a sequence, it will automatically be parsed.  If it is a filename or path, it will be opened and parsed.
+        @type tags: sequence or str
         """
         
         valid_kwargs = ['harvesters']
@@ -132,10 +133,10 @@ class ctags_file:
     def parse(self, tags, **kwargs):
         """
         Parses ctags file and constructs ctags_entry list.
-        @param tags: Filename or sequence of tag strings to parse.
-        @type tags: sequence or str
             - B{Keyword Arguments:}
                 - B{harvesters:} (list) list of harvester classes
+        @param tags: Filename or sequence of tag strings to parse.
+        @type tags: sequence or str
         @raises ValueError: parsing error
         """
 
@@ -185,8 +186,8 @@ class ctags_file:
     def harvest(self, harvesters):
         """
         Used to perform new data harvesters with already processed tags.
-        @param harvesters: list of harvest classes to apply to existing tags.
-        @type harvesters: list of instances supporting base_harvester interface.
+        @param harvesters: harvester classes to apply to existing tags.
+        @type harvesters: list
         @raises ValueError: if no tag data is available to process.
         """
         

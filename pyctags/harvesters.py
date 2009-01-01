@@ -80,7 +80,8 @@ class kind_harvester(base_harvester):
         """
         Gets the dict built with self.feed().  
         Dict keys are tag kinds, values are lists of ctags_entry instances sporting that kind.
-        @returns: dict
+        @returns: tag data organized by exuberant ctags kind
+        @rtype: dict
         """
         return self.kinds
 
@@ -99,7 +100,9 @@ class by_name_harvester(base_harvester):
     
     def get_data(self):
         """
-        @returns: dict of entries, entry.name as key, value is a list of ctags_entry instances that correspond to entry.name
+        Gets the name-organized data.
+        @returns: entries organized with entry.name as key, value is a list of ctags_entry instances that correspond to entry.name
+        @rtype: dict
         """
         return self.names
 
@@ -140,14 +143,14 @@ class name_lookup_harvester(base_harvester):
 
     def starts_with(self, matchstr, **kwargs):
         """
-        Returns an alphabetical list of unique tag names that begin with matchstr.
+        Fetches an alphabetical list of unique tag names that begin with matchstr.
             - B{Parameters:}
                 - B{matchstr:} (str) string to search for in tags db
             - B{Keyword Arguments:}
                 - B{num_results:} (int) maximum number of results to return, 0 for all, default
                 - B{case_sensitive:} (bool) whether to match case, default False
-            - B{Returns:}
-                - (list of str) matching tag names
+        @returns: matching tag names
+        @rtype: list
         """
         
         valid_kwargs = ['num_results', 'case_sensitive']

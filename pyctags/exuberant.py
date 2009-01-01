@@ -70,6 +70,7 @@ class exuberant_ctags(ctags_base):
         ctags_base.__init__(self, *args, **kwargs)
 
     def __process_kinds_list(self, kinds_list):
+        """ Slice n dice the --list-kinds output from exuberant ctags."""
         d = dict()
         key = ""
         for k in kinds_list:
@@ -140,6 +141,7 @@ class exuberant_ctags(ctags_base):
     def _prepare_to_generate(self, kw):
         """
         Prepares parameters to be passed to exuberant ctags.
+        @returns: tuple (generator_options_dict, files_str)
         """
         input_file_override = False
         
@@ -182,10 +184,9 @@ class exuberant_ctags(ctags_base):
                 - B{tag_program:} (str) path to ctags executable, or name of a ctags program in path
                 - B{files:} (sequence) files to process with ctags
                 - B{generator_options:} (dict) command-line options to pass to ctags program
-            - B{Returns:}
-                - len 2 tuple; (list of ctags str, ctags format)
+            @returns: strings output by exuberant ctags
+            @rtype: list
             @raise ValueError: ctags executable path not set, fails execution
-            
         """
         valid_kwargs = ['tag_program', 'files', 'generator_options']
         validator.validate(kwargs.keys(), valid_kwargs)
@@ -230,14 +231,14 @@ class exuberant_ctags(ctags_base):
     def generate_tagfile(self, output_file, **kwargs):
         """ 
         Generates tag file from list of files.
-        @param output_file: File name and location to write tagfile.
-        @type output_file: str
             - B{Keyword Arguments:}
                 - B{tag_program:} (str) path to ctags executable, or name of a ctags program in path
                 - B{files:} (sequence) files to process with ctags
                 - B{generator_options:} (dict) options to pass to ctags program
-            - B{Returns:}
-                - (boolean) file written
+        @param output_file: File name and location to write tagfile.
+        @type output_file: str
+        @returns: file written
+        @rtype: boolean
         @raise ValueError: ctags executable path not set or output file isn't valid
             
         """
@@ -293,8 +294,8 @@ class exuberant_ctags(ctags_base):
                 - B{files:} (sequence) files to process with ctags
                 - B{generator_options:} (dict) options to pass to ctags program
                 - B{harvesters:} (list) list of harvester data classes for ctags_file to use while parsing
-            - B{Returns:}
-                - (ctags_file or None) generated instance of ctags_file on success, None on failure
+        @returns: generated instance of ctags_file on success, None on failure
+        @rtype: (ctags_file or None)
         @raise ValueError: ctags executable path not set
         """
         valid_kwargs = ['tag_program', 'files', 'generator_options', 'harvesters']
