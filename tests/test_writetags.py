@@ -128,7 +128,7 @@ class test_exuberant_ctags(unittest.TestCase):
         ec = exuberant_ctags(tag_program=tag_program, files=fl)
         ec.generate_tags()
         self.failUnless(len(ec.warnings))
-        self.failUnlessEqual(ec.warnings[0], 'ctags: Warning: cannot open source file "foobar.py" : No such file or directory')
+        self.failUnless(ec.warnings[0].find('Warning: cannot open source file "foobar.py" : No such file or directory') > 0)
 
         ec.generate_tags(files=file_lists['relpath'])
         self.failUnlessEqual(len(ec.warnings), 0)
@@ -144,6 +144,6 @@ class test_exuberant_ctags(unittest.TestCase):
         for tag in tf2.tags:
             self.failUnlessEqual(repr(tag), repr(tf.tags[i]))
             i += 1
-            
+    
 if __name__ == '__main__':
     unittest.main()
