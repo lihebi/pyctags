@@ -1,7 +1,0 @@
-* extend custom parameter tests for generation, particularly for situations where args are used internally
-* scalability, very large projects (i.e. kernel source) take a long long while and should possibly give some feedback
-* provide information on files that ctags didn't process but were in file list
-* add "queries" to tagfile for extended tag values, so you could list all methods, or all functions, or all Python, whatever
-* generate and store at runtime tags per-file, so that ctags doesn't have to be run on every file whenever one is changed
-* add a sort of max info option to exuberant ctags wrapper, to make a shortcut for generating the most information on source
-* command line parameters for exuberant ctags may depend on exuberant ctags version, particularly --langmap and --flags, so make that easy
