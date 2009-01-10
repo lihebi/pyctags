@@ -61,7 +61,7 @@ class base_harvester:
 class kind_harvester(base_harvester):
     """ Harvests exuberant ctags' extended "kind" information, such as class, member, variable, etc."""
     def __init__(self):
-        self.kinds = {}
+        self.kinds = dict()
     
     def feed(self, entry):
         """ 
