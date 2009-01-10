@@ -23,7 +23,8 @@ This module uses the subprocess.Popen function.  Users of this module could pass
 """
 import subprocess, os, sys
 from copy import copy
-
+#from string import strip, lstrip
+import re
 
 try:
     # do relative imports for tests
@@ -45,6 +46,7 @@ class exuberant_ctags(ctags_base):
     """
     __version_opt = "--version"
     __list_kinds_opt = "--list-kinds"
+    __list_maps_opt = "--list-maps"
     __argless_args = ["--version", "--help", "--license", "--list-languages", 
         "-a", "-B", "-e", "-F", "-n", "-N", "-R", "-u", "-V", "-w", "-x"]
     __default_opts = {"-L" : "-", "-f" : "-"}
@@ -65,7 +67,10 @@ class exuberant_ctags(ctags_base):
         self.version = None
         """ Exuberant ctags version number."""
         self.language_info = None
-        """ Exuberant ctags supported language parsing features."""
+        """ Exuberant ctags supported language parsing features. None or dict.  Language name as key, value is a list of language features."""
+        
+        self.language_maps = None
+        """ Exuberant ctags supported language file extensions to map to a language parser.  None or dict.  Language name is key, value is list of file extensions."""
 
         ctags_base.__init__(self, *args, **kwargs)
 
@@ -88,6 +93,34 @@ class exuberant_ctags(ctags_base):
     
         return d
 
+    def __recurse_map_sets(self, sets, previous, results):
+        if len(sets) > 1:
+            for elt in sets[0]:
+                self.__recurse_map_sets(sets[1:], previous + elt, results)
+        else:
+            for elt in sets[0]:
+                results.append(previous + elt)
+        return results
+        
+    
+    def __process_maps_list(self, lines):
+        d = dict()
+        map_expr = re.compile(r'([\w\*\.]*)((?:\[\w+\])+)(\w*)')
+        for l in lines:
+            first_star = l.find('*')
+            if first_star > 0:
+                lang = l[:first_star].strip()
+                exts = l[first_star:]
+                d[lang] = list()
+                for entry in exts.split():
+                    entry = entry.strip()
+                    if entry.find('[') >= 0:
+                        (prefix, lettersets, suffix) = map_expr.match(entry).groups()
+                        lettersets = lettersets[1:-1].split('][')
+                        d[lang].extend([prefix.lstrip('*') + x + suffix for x in self.__recurse_map_sets(lettersets, '', list())])
+                    else:
+                        d[lang].append(entry.lstrip('*'))
+        return d
 
     def _query_tag_generator(self, path):
         """
@@ -115,6 +148,11 @@ class exuberant_ctags(ctags_base):
         (out, err) = p.communicate()
         
         self.language_info = self.__process_kinds_list(out.decode("utf-8").splitlines())
+        
+        p = subprocess.Popen(path + ' ' + self.__list_maps_opt, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        (out, err) = p.communicate()
+        self.language_extensions = self.__process_maps_list([x.strip() for x in out.decode("utf-8").splitlines()])
+        self.all_extensions = [y for x in self.language_extensions.values() for y in x]
         
     def _dict_to_args(self, gen_opts):
         """

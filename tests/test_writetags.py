@@ -152,5 +152,13 @@ class test_exuberant_ctags(unittest.TestCase):
             self.failUnlessEqual(repr(tag), repr(tf.tags[i]))
             i += 1
     
+    def test_language_maps(self):
+        ec = exuberant_ctags(tag_program=tag_program)
+        self.failUnless('.x68' in ec.all_extensions)
+        self.failUnless('.x86' in ec.language_extensions['Asm'])
+        self.failUnless('makefile' in ec.all_extensions)
+        self.failUnless('GNUmakefile' in ec.language_extensions['Make'])
+        self.failUnless('.scm' in ec.all_extensions)
+        
 if __name__ == '__main__':
     unittest.main()
