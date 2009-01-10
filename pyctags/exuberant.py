@@ -72,6 +72,9 @@ class exuberant_ctags(ctags_base):
         self.language_maps = None
         """ Exuberant ctags supported language file extensions to map to a language parser.  None or dict.  Language name is key, value is list of file extensions."""
 
+        self.all_extensions = None
+        """ List of files and extensions that Exuberant Ctags knows how to map to a parser."""
+        
         ctags_base.__init__(self, *args, **kwargs)
 
     def __process_kinds_list(self, kinds_list):
