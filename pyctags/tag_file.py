@@ -51,8 +51,6 @@ class ctags_file:
         self._clear_variables()
 
         if tags:
-            if type(tags) == str:
-                tags = open(tags).readlines()
             self.parse(tags, **kwargs)
 
     def _clear_variables(self):
