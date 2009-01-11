@@ -138,7 +138,7 @@ class ctags_file:
         @raises ValueError: parsing error
         """
 
-        if type(tags) == str:
+        if type(tags) == str or (not _PYTHON_3000_ and type(tags) is unicode):
             # we can iterate over the file, it doesn't have to be in a list first
             tags = open(tags)
 
