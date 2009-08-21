@@ -98,7 +98,14 @@ class ctags_entry:
                     extension_fields = None
     
                     if the_rest.find(_COMMENT_BEGIN_) > 0:
-                        (locator, junk, extension_fields) = the_rest.rpartition(_COMMENT_BEGIN_)
+                        try:
+                            (locator, junk, extension_fields) = the_rest.rpartition(_COMMENT_BEGIN_)
+                        except AttributeError:
+                            # assume this is pre Python 2.5
+                            tmplist = the_rest.split(_COMMENT_BEGIN_)
+                            locator = _COMMENT_BEGIN_.join(tmplist[:-1])
+                            junk = _COMMENT_BEGIN_
+                            extension_fields = tmplist[-1]
                     else:
                         locator = the_rest
     
