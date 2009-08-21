@@ -51,7 +51,7 @@ class exuberant_ctags(ctags_base):
         "-a", "-B", "-e", "-F", "-n", "-N", "-R", "-u", "-V", "-w", "-x"]
     __default_opts = {"-L" : "-", "-f" : "-"}
     __exuberant_id = "exuberant ctags"
-    __supported_versions = ["5.7", "5.6b1"]
+    __supported_versions = ["5.7", "5.6b1", "5.8"]
     __warning_str = ": Warning:"
     
     def __init__(self, *args, **kwargs):

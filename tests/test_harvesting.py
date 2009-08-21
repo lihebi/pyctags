@@ -23,6 +23,7 @@ from tag_file import ctags_file
 from harvesters import kind_harvester, name_lookup_harvester, by_name_harvester
 from tag_lists import tag_lists
 from exuberant import exuberant_ctags 
+from make_tagfiles import tag_program
 
 class TestHarvesting(TestCase):
     def do_kind_harvest(self, taglist):
@@ -38,7 +39,8 @@ class TestHarvesting(TestCase):
 
     def test_kind_harvester(self):
 
-        ec = exuberant_ctags()
+        ec = exuberant_ctags(tag_program=tag_program)
+
         (tf, kinds) = self.do_kind_harvest(tag_lists['unextended']['body'])
         self.failUnlessEqual(len(kinds), 0)
         
@@ -81,9 +83,14 @@ class TestHarvesting(TestCase):
     def test_name_lookup_harvester(self):
         lookup_harvest = name_lookup_harvester()
         tf = ctags_file(tag_lists['extended']['body'], harvesters=[lookup_harvest])
+        ec = exuberant_ctags(tag_program=tag_program)
         
+        # exuberant ctags 5.8 picks up 5 matches, because of copy.copy
         tags = lookup_harvest.starts_with('c', case_sensitive=True)
-        self.failUnlessEqual(len(tags), 4)
+        if ec.version in ['5.7', '5.6b1']:
+            self.failUnlessEqual(len(tags), 4)
+        if ec.version in ['5.8']:
+            self.failUnlessEqual(len(tags), 5)
 
         tags = lookup_harvest.starts_with('C', case_sensitive=True)
         self.failUnlessEqual(len(tags), 0)
@@ -92,7 +99,10 @@ class TestHarvesting(TestCase):
         self.failUnlessEqual(len(atags), 0)
 
         tags = lookup_harvest.starts_with('c')
-        self.failUnlessEqual(len(tags), 4)
+        if ec.version in ['5.7', '5.6b1']:
+            self.failUnlessEqual(len(tags), 4)
+        if ec.version in ['5.8']:
+            self.failUnlessEqual(len(tags), 5)
         
         tag_tags = lookup_harvest.starts_with('ctags_')
         self.failUnlessEqual(len(tag_tags), 4)
