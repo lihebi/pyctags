@@ -70,7 +70,6 @@ class ctags_entry:
         """ If not None, line number to locate this tag in self.file."""
         self.extensions = None
         """ If not none, dict of extension fields embedded in comments in the tag entry, from exuberant ctags."""
-        self.__rep = None
         
         entry = dict()
         if len(args) == 1:
@@ -166,11 +165,16 @@ class ctags_entry:
         if 'extensions' in entry:
             self.extensions = entry['extensions']
 
-
-        self.__rep = entry
-
     def __repr__(self):
-        return str(self.__rep)
+        d = {'file' : self.file, 'name' : self.name}
+        if self.pattern:
+            d['pattern'] = self.pattern
+        if self.line_number:
+            d['line_number'] = self.line_number
+        if self.extensions:
+            d['extensions'] = self.extensions
+            
+        return str(d)
         
     def __str__(self):
         idx = self.file.rfind('/')
